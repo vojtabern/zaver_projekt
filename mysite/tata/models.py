@@ -3,8 +3,6 @@ from django.db import models
 
 class basicInfo(models.Model):
     uryvek = models.TextField(default='')
-
-
     class Meta:
         ordering = ["uryvek"]
 
@@ -12,5 +10,5 @@ class basicInfo(models.Model):
         return self.uryvek
 
 
-#tady class
+# tady class
 # Create your models here.

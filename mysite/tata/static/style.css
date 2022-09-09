@@ -7,3 +7,27 @@
 .card{
      background-color: #fce3b1;
 }
+
+
+.container{
+    background-color: rgb(225, 227, 221);
+}
+header{
+    margin-top: 15px;
+}
+
+h1{
+    color: darkblue;
+}
+
+nav{
+    background-color: #e3f2fd;
+}
+.navbar .navbar-nav .nav-item .nav-link{
+    border-right: 2px solid black;
+}
+
+@media only screen and (min-width: 992px) {
+  .navbar .navbar-nav .nav-item .nav-link {
+    padding: 0 0.5em;
+  }
