@@ -6,11 +6,12 @@
 
 .card{
      background-color: #fce3b1;
+     margin-top: 5px;
 }
 
 
 .container{
-    background-color: rgb(225, 227, 221);
+    background-color: white;
 }
 header{
     margin-top: 15px;
@@ -31,3 +32,7 @@ nav{
   .navbar .navbar-nav .nav-item .nav-link {
     padding: 0 0.5em;
   }
+
+ body{
+     background-color: #e3f2fd;
+ }
