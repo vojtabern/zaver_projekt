@@ -43,9 +43,18 @@
                         <ul class="uryvky">
                             <li>Mgr. Jan BERNARD</li>
                             <li>psycholog a psychoterapeut</li>
-                            <li><b>Provozovna:</b> Hradecká 16, Opava</li>
-                            <li><b>Telefon:</b> +420 737 881 112</li>
-                            <li><b>E-mail:</b> <a href="mailto:jbernard@hotmail.cz">jbernard@hotmail.cz</a></li>
+
+                            {% if num_info == 1 %}
+                                {%for informaci in informace%}
+                                    <li><b>Provozovna:</b> {{ informaci.provozovna }}</li>
+                                    <li><b>Telefon:</b> {{ informaci.telefon }}</li>
+                                    <li><b>E-mail:</b> <a href="mailto:{{informaci.email}}">{{ informaci.email }}</a></li>
+                                {%endfor%}
+                            {%else%}
+                                <li><b>Provozovna:</b> {{ default_pro }}</li>
+                                <li><b>Telefon:</b> {{default_tel}}</li>
+                                <li><b>E-mail:</b> <a href="mailto:{{informaci.email}}">{{default_email}}</a></li>
+                            {%endif%}
                         </ul>
                     </p>
                 </div>
