@@ -9,10 +9,10 @@
     <!--Načtení adresy statických souborů webu -musí být před prvním použití identifikátoru static -->
     {% load static %}
 
-    <link rel="stylesheet" href=" {%static './style.css' %}">
+    <link rel="stylesheet" href="{%static './style.css' %}">
 
 </head>
-<body>
+<body class="bg-white">
 {% block header %}
     {% include "page/header.html" %}
 {% endblock %}

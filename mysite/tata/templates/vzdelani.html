@@ -1,0 +1,54 @@
+{%extends "base.html"%}
+
+{%block content%}
+<h4>Vzdělání</h4>
+{%for vzd in vzdelani3%}
+    <ul>
+        <li>
+            {{vzd.nazev}}
+        </li>
+    </ul>
+{%endfor%}
+<h4>Diagnostika</h4>
+{%for vzd in vzdelani%}
+    <ul>
+        <li>
+            {{vzd.nazev}}
+        </li>
+    </ul>
+{%endfor%}
+<h4>Psychoterapeutický výcvik</h4>
+{%for vzd in vzdelani1%}
+    <ul>
+        <li>
+            {{vzd.nazev}}
+        </li>
+    </ul>
+{%endfor%}
+<h4>Doplňkové vzdělání</h4>
+{%for vzd in vzdelani2%}
+    <ul>
+        <li>
+            {{vzd.nazev}}
+        </li>
+    </ul>
+{%endfor%}
+<h4>Pracovní zkušenosti</h4>
+{%for vzd in vzdelani4%}
+    <ul>
+        <li>
+            {{vzd.nazev}}
+        </li>
+    </ul>
+{%endfor%}
+<h4>Výzkum a teoretické práce</h4>
+{%for vzd in vzdelani5%}
+    <ul>
+        <li>
+            {{vzd.nazev}}
+        </li>
+    </ul>
+{%endfor%}
+
+
+{%endblock%}

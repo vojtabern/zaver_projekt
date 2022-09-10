@@ -9,10 +9,6 @@
      margin-top: 5px;
 }
 
-
-.container{
-
-}
 header{
     margin-top: 15px;
 }
@@ -22,20 +18,16 @@ h1{
 }
 
 nav{
-    background-color: #e3f2fd;
+    background-color: white;
 }
 .navbar .navbar-nav .nav-item .nav-link{
     border-right: 2px solid black;
 }
 
-@media only screen and (min-width: 992px) {
-  .navbar .navbar-nav .nav-item .nav-link {
-    padding: 0 0.5em;
-  }
-
- body{
-     background-color: #e3f2fd;
- }
+footer{
+    background-color: #ebedef;
+    margin-top: 5px;
+}
 
 .bg-cover {
     background-size: cover !important;
@@ -51,3 +43,9 @@ nav{
         height: 100%;
       }
     }
+
+@media only screen and (min-width: 992px) {
+  .navbar .navbar-nav .nav-item .nav-link {
+    padding: 0 0.5em;
+  }
+}

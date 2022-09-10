@@ -19,4 +19,28 @@ def index(request):
     }
 
     return render(request, 'index.html', context=context)
+
+
+def vzdelani(request):
+    #y = Vzdelani.objects.all()
+    #grad = all(x.OPTIONS for x in y)
+    typ = Vzdelani.typ
+    vzdelani = Vzdelani.objects.filter(typ='základní vzdělání').values()
+    #vzdelani = Vzdelani.objects.all()
+    vzdelani1 = Vzdelani.objects.filter(typ='Psychoterapeutický výcvik').values()
+    vzdelani2 = Vzdelani.objects.filter(typ='Doplňkové vzdělání').values()
+    vzdelani3 = Vzdelani.objects.filter(typ='základní vzdělání').values()
+    vzdelani4 = Vzdelani.objects.filter(typ='Pracovní zkušenosti').values()
+    vzdelani5 = Vzdelani.objects.filter(typ='Výzkum a teoretické práce').values()
+
+    context = {
+        'vzdelani':vzdelani,
+        'vzdelani1':vzdelani1,
+        'vzdelani2': vzdelani2,
+        'vzdelani3': vzdelani3,
+        'vzdelani4': vzdelani4,
+        'vzdelani5':vzdelani5,
+    }
+    return render(request, 'vzdelani.html', context=context)
+
 # Create your views here.
