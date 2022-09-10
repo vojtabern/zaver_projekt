@@ -1,20 +1,37 @@
 {%extends "base.html"%}
 
 {%block content%}
-
-{%for inf in vrat%}
-    <h4>{{inf}}</h4>
-    {%for vzd in vzdelani%}
-    {%if inf == vzd.typ %}
-    <ul>
-        <li>
-            {{vzd.nazev}}
-        </li>
-    </ul>
-    {%endif%}
+<div class="container-fluid">
+    {%for inf in vrat%}
+        {%with ide=inf|slugify %}
+        <div class="container" id="accordion">
+      <div class="card">
+        <div class="card-header border" id="heading{{ide}}">
+          <h5 class="mb-0">
+            <button class="btn btn-link collapsed text-dark" data-toggle="collapse" data-target="#collapse{{ide}}" aria-expanded="false" aria-controls="collapse{{ide}}">
+                {{inf}}
+            </button>
+          </h5>
+        </div>
+        <div id="collapse{{ide}}" class="collapse" aria-labelledby="heading{{ide}}" data-parent="#accordion">
+          <div class="card-body warm-orange border">
+              <ul>
+              {%for vzd in vzdelani%}
+                {%if inf == vzd.typ %}
+                <li>
+                    {{vzd.nazev}}
+                </li>
+                {%endif%}
+                {%endfor%}
+              </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+    {%endwith%}
     {%endfor%}
-{%endfor%}
-
+</div>
+{%endblock%}
 
 <!--<h4>Vzdělání</h4>-->
 <!--{%for vzd in vzdelani3%}-->
@@ -65,4 +82,4 @@
 <!--    </ul>-->
 <!--{%endfor%}-->
 
-{%endblock%}
+
