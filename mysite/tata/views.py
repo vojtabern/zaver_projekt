@@ -22,20 +22,12 @@ def index(request):
 
 
 def vzdelani(request):
-    vzdelani = Vzdelani.objects.filter(typ='základní vzdělání').values()
-    vzdelani1 = Vzdelani.objects.filter(typ='Psychoterapeutický výcvik').values()
-    vzdelani2 = Vzdelani.objects.filter(typ='Doplňkové vzdělání').values()
-    vzdelani3 = Vzdelani.objects.filter(typ='základní vzdělání').values()
-    vzdelani4 = Vzdelani.objects.filter(typ='Pracovní zkušenosti').values()
-    vzdelani5 = Vzdelani.objects.filter(typ='Výzkum a teoretické práce').values()
+    vrat = Vzdelani.get_options(Vzdelani)
+    vzdelani3 = Vzdelani.objects.all()
 
     context = {
-        'vzdelani0':vzdelani,
-        'vzdelani1':vzdelani1,
-        'vzdelani2': vzdelani2,
-        'vzdelani3': vzdelani3,
-        'vzdelani4': vzdelani4,
-        'vzdelani5':vzdelani5,
+        'vrat':vrat,
+        'vzdelani': vzdelani3,
     }
     return render(request, 'vzdelani.html', context=context)
 

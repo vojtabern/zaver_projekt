@@ -26,6 +26,10 @@ class Vzdelani(models.Model):
     nazev = models.CharField( max_length=200)
     typ = models.CharField(max_length=45, choices=OPTIONS, default='základní vzdělání')
 
+    def get_options(self):
+        vrat = (zakl, psycho, dopln, dia, prace, vyzkum) = self.OPTIONS
+        ifo = (vrat[0][0], vrat[1][0], vrat[2][0], vrat[3][0], vrat[4][0], vrat[5][0])
+        return ifo
 
 
     class Meta:
