@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="cs">
 <head>
+
     <!--Blok s titulkem stránky -->
     <title>{% block title %}janbernard{% endblock %}</title>
     <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
@@ -8,7 +9,7 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
     <!--Načtení adresy statických souborů webu -musí být před prvním použití identifikátoru static -->
     {% load static %}
-
+    <link rel="shortcut icon" type="image/png" href="{% static '/img/logo.ico' %}"/>
     <link rel="stylesheet" href="{%static './style.css' %}">
 
 </head>

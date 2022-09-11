@@ -1,8 +1,8 @@
 from django.urls import path
 
-from . import views
+from tata.views import *
 
 urlpatterns = [
-    path('', views.index, name='index'),
-    path('zivotopis/', views.vzdelani, name='vzdelani')
+    path('', Index.as_view(), name='index'),
+    path('zivotopis/', Zivotopis.as_view(), name='vzdelani')
 ]

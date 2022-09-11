@@ -17,7 +17,7 @@
           <div class="card-body warm-orange border">
               <ul>
               {%for vzd in vzdelani%}
-                {%if inf == vzd.typ %}
+                {%if inf|slugify == vzd.typ|slugify %}
                 <li>
                     {{vzd.nazev}}
                 </li>

@@ -51,9 +51,9 @@
                                     <li><b>E-mail:</b> <a href="mailto:{{informaci.email}}">{{ informaci.email }}</a></li>
                                 {%endfor%}
                             {%else%}
-                                <li><b>Provozovna:</b> {{ default_pro }}</li>
-                                <li><b>Telefon:</b> {{default_tel}}</li>
-                                <li><b>E-mail:</b> <a href="mailto:{{informaci.email}}">{{default_email}}</a></li>
+                                    <li><b>Provozovna:</b> {{ default.0 }}</li>
+                                    <li><b>Telefon:</b> {{default.1 }}</li>
+                                    <li><b>E-mail:</b> <a href="mailto:{{default.2}}">{{default.2}}</a></li>
                             {%endif%}
                         </ul>
                     </p>

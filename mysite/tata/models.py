@@ -13,6 +13,11 @@ class basicInfo(models.Model):
     def __str__(self):
         return self.description
 
+    def get_info(self):
+        default = (self._meta.get_field('provozovna').get_default(), self._meta.get_field('telefon').get_default(), self._meta.get_field('email').get_default())
+        vrat = (def_prov, def_tel, def_email) = default
+        return vrat
+
 
 class Vzdelani(models.Model):
     OPTIONS = (
