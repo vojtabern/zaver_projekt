@@ -23,7 +23,7 @@ Nainstaluj a spust server:
 ```
 pip install -r requirements.txt
 cd mysite
-Pro jistotu: python manage.py makemigration; a pak; python manage.py migrate
+python manage.py makemigration && python manage.py migrate
 python manage.py runserver
 ```
 Server by měl běžet na http://127.0.0.1:8000/
