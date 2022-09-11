@@ -1,12 +1,12 @@
 {%load static %}
 
 <div class="card text-center border border-dark ">
+
         <div class="card-body">
             <p class="card-text">
                 <ul class="uryvky">
-                    <li>Mgr. Jan BERNARD</li>
+                    <li>Mgr. Jan BERNARD{{mozna}}</li>
                     <li>psycholog a psychoterapeut</li>
-
                     {% if num_info == 1 %}
                         {%for informaci in informace%}
                             <li><b>Provozovna:</b> {{ informaci.provozovna }}</li>

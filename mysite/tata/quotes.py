@@ -11,6 +11,13 @@ class Scrape():
     quotes = []
     rand = 1
 
+    # async def get_data(self):
+    #     task1 = asyncio.ensure_future(Scrape.scrape_uryvky(self, "autor"))
+    #     task2 = asyncio.ensure_future(Scrape.scrape_uryvky(self, "uryvek"))
+    #     await asyncio.wait([task1, task2])
+    #     print("done")
+    #     return("done")
+
     def scrape_uryvky(self, x):
         page_num = str(1)
         URL = 'https://www.goodreads.com/quotes/tag/inspirational?page=' + page_num
