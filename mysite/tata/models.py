@@ -15,8 +15,8 @@ class basicInfo(models.Model):
 
     def get_info(self):
         default = (self._meta.get_field('provozovna').get_default(), self._meta.get_field('telefon').get_default(), self._meta.get_field('email').get_default())
-        vrat = (def_prov, def_tel, def_email) = default
-        return vrat
+
+        return default
 
 
 class Vzdelani(models.Model):
@@ -35,7 +35,6 @@ class Vzdelani(models.Model):
         vrat = (zakl, psycho, dopln, dia, prace, vyzkum) = self.OPTIONS
         ifo = (vrat[0][0], vrat[1][0], vrat[2][0], vrat[3][0], vrat[4][0], vrat[5][0])
         return ifo
-
 
     class Meta:
         ordering = ["typ"]

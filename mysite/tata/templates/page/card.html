@@ -1,0 +1,42 @@
+{%load static %}
+
+<div class="card text-center border border-dark ">
+        <div class="card-body">
+            <p class="card-text">
+                <ul class="uryvky">
+                    <li>Mgr. Jan BERNARD</li>
+                    <li>psycholog a psychoterapeut</li>
+
+                    {% if num_info == 1 %}
+                        {%for informaci in informace%}
+                            <li><b>Provozovna:</b> {{ informaci.provozovna }}</li>
+                            <li><b>Telefon:</b> {{ informaci.telefon }}</li>
+                            <li><b>E-mail:</b> <a href="mailto:{{informaci.email}}">{{ informaci.email }}</a></li>
+                        {%endfor%}
+                    {%else%}
+                            <li><b>Provozovna:</b> {{ default.0 }}</li>
+                            <li><b>Telefon:</b> {{default.1 }}</li>
+                            <li><b>E-mail:</b> <a href="mailto:{{default.2}}">{{default.2}}</a></li>
+                    {%endif%}
+                </ul>
+            </p>
+        </div>
+    </div>
+    <div class="card text-center border border-dark">
+        <div class="card-body">
+            <p class="card-text">
+                <ul class="uryvky">
+                    <li>Jsem něžný </li>
+                    <li>jsem krutý </li>
+                    <li>jsem život. </li>
+                    <li>Ty pláčeš? </li>
+                    <li>I v slzách je síla. </li>
+                    <li>Tak jdi a žij! </li>
+                </ul>
+            <p class="card-footer">
+                (John Lennon)
+            </p>
+            </p>
+        </div>
+    </div>
+</div>

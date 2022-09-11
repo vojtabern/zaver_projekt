@@ -32,4 +32,17 @@ class Zivotopis(View):
         }
         return render(request, 'vzdelani.html', context=context)
 
+class Sluzby(View):
+
+    def get(self, request):
+        informace = basicInfo.objects.all()
+        default = basicInfo.get_info(basicInfo)
+        ahoj = "hello world"
+        context = {
+            'informace': informace,
+            'default': default,
+            'ahoj':ahoj,
+        }
+        return render(request, 'sluzby.html', context=context)
+
 # Create your views here.

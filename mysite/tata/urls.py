@@ -4,5 +4,6 @@ from tata.views import *
 
 urlpatterns = [
     path('', Index.as_view(), name='index'),
-    path('zivotopis/', Zivotopis.as_view(), name='vzdelani')
+    path('zivotopis/', Zivotopis.as_view(), name='vzdelani'),
+    path('sluzby/', Sluzby.as_view(), name='sluzby')
 ]
