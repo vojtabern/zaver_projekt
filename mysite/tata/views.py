@@ -3,27 +3,26 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from django.views import View
 from .models import *
-from tata.quotes import Scrape
-
+import aiohttp
+from bs4 import BeautifulSoup #scraping
+import requests
 
 class Index(View):
 
     def get(self, request):
-        kolo = request.POST.get(Scrape.scrape_uryvky(Scrape, "autor"))
 
         informace = basicInfo.objects.all()
         num_info = basicInfo.objects.all().count()
         default = basicInfo.get_info(basicInfo)
-        uryvek = (Scrape.scrape_uryvky(Scrape, "uryvek"))
-        autor = (Scrape.scrape_uryvky(Scrape, "autor"))
+        # uryvek = (Scrape.scrape_uryvky(Scrape, "uryvek"))
+        # autor = (Scrape.scrape_uryvky(Scrape, "autor"))
         #mozna = Scrape.get_data(Scrape)
         context = {
-            'mozna': kolo,
             'informace':informace,
             'default':default,
             'num_info':num_info,
-            'uryvek':uryvek,
-            'autor':autor,
+            # 'uryvek':uryvek,
+            # 'autor':autor,
         }
 
 
@@ -46,15 +45,31 @@ class Sluzby(View):
     def get(self, request):
         informace = basicInfo.objects.all()
         default = basicInfo.get_info(basicInfo)
-        uryvek = Scrape.scrape_uryvky(Scrape, "uryvek")
-        autor = Scrape.scrape_uryvky(Scrape, "autor")
+        # uryvek = Scrape.scrape_uryvky(Scrape, "uryvek")
+        # autor = Scrape.scrape_uryvky(Scrape, "autor")
         context = {
             'informace': informace,
             'default': default,
-            'uryvek': uryvek,
-            'autor': autor,
+            # 'uryvek': uryvek,
+            # 'autor': autor,
         }
         return render(request, 'sluzby.html', context=context)
+
+async def scrape_uryvky(request):
+    #https://www.goodreads.com/api
+    URL = 'https://zenquotes.io/api/quotes/authors'
+    async with aiohttp.ClientSession() as session:
+        async with session.get(URL) as res:
+            data = await res.json()
+            for d in range(len(data)):
+                i = d
+            print(data[0]["q"])
+            rand = random.randrange(0, i)
+        context = {
+            "quote": data[rand]["q"],
+            "autor": data[rand]["a"],
+        }
+    return render(request, "index.html", context=context,)
 
 # Create your views here.
 
