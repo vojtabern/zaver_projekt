@@ -1,11 +1,23 @@
 from django.db import models
 
+class Psycholog(models.Model):
+    id_psycholog = models.IntegerField(default=1, primary_key=True)
+    username = models.CharField(max_length=45)
+    password = models.CharField(max_length=50)
+
+    class Meta:
+        ordering = ["username"]
+
+    def __str__(self):
+        return self.username
 
 class basicInfo(models.Model):
     description = "Zakl. info"
+    id_basicInfo = models.IntegerField(default=1, primary_key=True)
     provozovna = models.CharField(default='Hradecká 16, Opava',max_length=200)
     telefon = models.CharField(default='+420 737 881 112',max_length=18)
     email = models.EmailField(default='jbernard@hotmail.cz')
+    fk_psycholog = models.ForeignKey(Psycholog,default=1, on_delete=models.CASCADE)
 
     class Meta:
         ordering = ["email"]
