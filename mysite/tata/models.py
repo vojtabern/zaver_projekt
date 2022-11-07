@@ -1,9 +1,6 @@
 from django.db import models
 
 
-
-
-
 class User(models.Model):
     description = "User"
     id_user = models.IntegerField(default=1, primary_key=True)
@@ -18,12 +15,12 @@ class Psycholog(models.Model):
     password = models.CharField(max_length=50)
     user_id = models.OneToOneField(User, on_delete=models.CASCADE, default=1)
 
-
     class Meta:
         ordering = ["username"]
 
     def __str__(self):
         return self.username
+
 
 class Vzdelani(models.Model):
     OPTIONS = (
@@ -49,9 +46,10 @@ class Vzdelani(models.Model):
     def __str__(self):
         return self.nazev
 
+#nefunguje why??
 class Client(models.Model):
     id_client = models.IntegerField(default=1, primary_key=True)
-    user_id = models.OneToOneField(User, on_delete=models.CASCADE)
+    user_id = models.OneToOneField(User, on_delete=models.CASCADE, default=1)
 
     class Meta:
         ordering = ["id_client"]
@@ -66,7 +64,7 @@ class basicInfo(models.Model):
     provozovna = models.CharField(default='Hradecká 16, Opava',max_length=200)
     telefon = models.CharField(default='+420 737 881 112',max_length=18)
     email = models.EmailField(default='jbernard@hotmail.cz')
-    psycholog_id = models.OneToOneField(Psycholog, on_delete=models.CASCADE ,default=1)
+    psycholog_id = models.OneToOneField(Psycholog, on_delete=models.CASCADE, default=1)
 
     class Meta:
         ordering = ["email"]
@@ -80,7 +78,28 @@ class basicInfo(models.Model):
         return default
 
 
+class Test(models.Model):
+    id_test = models.IntegerField(default=1, primary_key=True)
+    title = models.CharField(max_length=50, null=None)
+    user_id = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
 
+    class Meta:
+        ordering = ["title"]
+
+    def __str__(self):
+        return self.title
+
+
+class Take(models.Model):
+    id = models.IntegerField(default=1, primary_key=True)
+    test_id = models.ForeignKey(Test, on_delete=models.CASCADE, default=1)
+    user_id = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
+
+    class Meta:
+        ordering = ["test_id"]
+
+    def __str__(self):
+        return self.test_id
 
 # tady class
 # Create your models here.

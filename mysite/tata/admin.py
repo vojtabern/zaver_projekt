@@ -7,5 +7,7 @@ admin.site.register(basicInfo)
 admin.site.register(Vzdelani)
 admin.site.register(Client)
 admin.site.register(User)
+admin.site.register(Take)
+admin.site.register(Test)
 
 # Register your models here.
