@@ -1,0 +1,87 @@
+{%extends "base.html"%}
+
+{%block content%}
+<div class="container">
+    <div class="row">
+        <div class="col-md-8 pt-2">
+            <h4>O mě</h4>
+            <p>Poskytuji privátní psychologickou péči a služby pro jednotlivce, firmy a instituce.
+                Nabízím pomoc v náročných situacích života, a to jak v osobních, tak v partnerských problémech.
+            </p>
+            <ul>
+                <li>
+                    Trápí vás vaše malé sebevědomí?
+                </li>
+                <li>
+                    Máte pocit prázdnoty ve svém životě?
+                </li>
+                <li>
+                    Trpíte různými úzkostmi a strachy?
+                </li>
+                <li>
+                    Jste zklamaní z reakcí okolí na vaše problémy?
+                </li>
+                <li>
+                    Chcete konzultaci, nechcete dlouho čekat?
+                </li>
+                <li>
+                    Hledáte svou další cestu životem?
+                </li>
+                <li>
+                    Chcete se o sobě více dozvědět?
+                </li>
+                <li>
+                    Máte zájem o supervizi či osobnostní rozvoj?
+                </li>
+            </ul>
+            <p><b>Pokusíme se společně nalézt odpovědi na vaše potřeby a trápení.</b></p>
+        </div>
+        <div class="col-md-4">
+            {% block card %}
+                {%include "page/card.html"%}
+            {%endblock%}
+<!--            <div class="card text-center border border-dark ">-->
+<!--                <div class="card-body">-->
+<!--                    <p class="card-text">-->
+<!--                        <ul class="uryvky">-->
+<!--                            <li>Mgr. Jan BERNARD</li>-->
+<!--                            <li>psycholog a psychoterapeut</li>-->
+
+<!--                            {% if num_info == 1 %}-->
+<!--                                {%for informaci in informace%}-->
+<!--                                    <li><b>Provozovna:</b> {{ informaci.provozovna }}</li>-->
+<!--                                    <li><b>Telefon:</b> {{ informaci.telefon }}</li>-->
+<!--                                    <li><b>E-mail:</b> <a href="mailto:{{informaci.email}}">{{ informaci.email }}</a></li>-->
+<!--                                {%endfor%}-->
+<!--                            {%else%}-->
+<!--                                    <li><b>Provozovna:</b> {{ default.0 }}</li>-->
+<!--                                    <li><b>Telefon:</b> {{default.1 }}</li>-->
+<!--                                    <li><b>E-mail:</b> <a href="mailto:{{default.2}}">{{default.2}}</a></li>-->
+<!--                            {%endif%}-->
+<!--                        </ul>-->
+<!--                    </p>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--            <div class="card text-center border border-dark">-->
+<!--                <div class="card-body">-->
+<!--                    <p class="card-text">-->
+<!--                        <ul class="uryvky">-->
+<!--                            <li>Jsem něžný </li>-->
+<!--                            <li>jsem krutý </li>-->
+<!--                            <li>jsem život. </li>-->
+<!--                            <li>Ty pláčeš? </li>-->
+<!--                            <li>I v slzách je síla. </li>-->
+<!--                            <li>Tak jdi a žij! </li>-->
+<!--                        </ul>-->
+<!--                    <p class="card-footer">-->
+<!--                        (John Lennon)-->
+<!--                    </p>-->
+<!--                    </p>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+    </div>
+</div>
+
+
+{%endblock%}

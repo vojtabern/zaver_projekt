@@ -1,0 +1,55 @@
+.uryvky{
+    list-style-type: none;
+    font-style: italic;
+    padding: 0;
+}
+
+.card{
+     background-color: #fce3b1;
+     margin-top: 5px;
+}
+
+.warm-orange{
+    background-color: #FEC47F;
+}
+
+header{
+    margin-top: 15px;
+}
+
+h1{
+    color: blue;
+}
+
+nav{
+    background-color: white;
+}
+.navbar .navbar-nav .nav-item .nav-link{
+    border-right: 2px solid black;
+}
+
+footer{
+    background-color: #ebedef;
+    margin-top: 5px;
+}
+
+.bg-cover {
+    background-size: cover !important;
+}
+
+#intro {
+      height: 100%;
+    }
+
+    /* Height for devices larger than 992px */
+    @media (min-width: 992px) {
+      #intro {
+        height: 100%;
+      }
+    }
+
+@media only screen and (min-width: 992px) {
+  .navbar .navbar-nav .nav-item .nav-link {
+    padding: 0 0.5em;
+  }
+}

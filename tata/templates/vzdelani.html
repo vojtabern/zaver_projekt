@@ -1,0 +1,85 @@
+{%extends "base.html"%}
+
+{%block content%}
+<div class="container-fluid">
+    {%for inf in vrat%}
+        {%with ide=inf|slugify %}
+        <div class="container" id="accordion">
+      <div class="card">
+        <div class="card-header border" id="heading{{ide}}">
+          <h5 class="mb-0">
+            <button class="btn btn-link collapsed text-dark" data-toggle="collapse" data-target="#collapse{{ide}}" aria-expanded="false" aria-controls="collapse{{ide}}">
+                {{inf}}
+            </button>
+          </h5>
+        </div>
+        <div id="collapse{{ide}}" class="collapse" aria-labelledby="heading{{ide}}" data-parent="#accordion">
+          <div class="card-body warm-orange border">
+              <ul>
+              {%for vzd in vzdelani%}
+                {%if inf|slugify == vzd.typ|slugify %}
+                <li>
+                    {{vzd.nazev}}
+                </li>
+                {%endif%}
+                {%endfor%}
+              </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+    {%endwith%}
+    {%endfor%}
+</div>
+{%endblock%}
+
+<!--<h4>Vzdělání</h4>-->
+<!--{%for vzd in vzdelani3%}-->
+<!--    <ul>-->
+<!--        <li>-->
+<!--            {{vzd.nazev}}-->
+<!--        </li>-->
+<!--    </ul>-->
+<!--{%endfor%}-->
+<!--<h4>Diagnostika</h4>-->
+<!--{%for vzd in vzdelani0%}-->
+<!--    <ul>-->
+<!--        <li>-->
+<!--            {{vzd.nazev}}-->
+<!--        </li>-->
+<!--    </ul>-->
+<!--{%endfor%}-->
+<!--<h4>Psychoterapeutický výcvik</h4>-->
+<!--{%for vzd in vzdelani1%}-->
+<!--    <ul>-->
+<!--        <li>-->
+<!--            {{vzd.nazev}}-->
+<!--        </li>-->
+<!--    </ul>-->
+<!--{%endfor%}-->
+<!--<h4>Doplňkové vzdělání</h4>-->
+<!--{%for vzd in vzdelani2%}-->
+<!--    <ul>-->
+<!--        <li>-->
+<!--            {{vzd.nazev}}-->
+<!--        </li>-->
+<!--    </ul>-->
+<!--{%endfor%}-->
+<!--<h4>Pracovní zkušenosti</h4>-->
+<!--{%for vzd in vzdelani4%}-->
+<!--    <ul>-->
+<!--        <li>-->
+<!--            {{vzd.nazev}}-->
+<!--        </li>-->
+<!--    </ul>-->
+<!--{%endfor%}-->
+<!--<h4>Výzkum a teoretické práce</h4>-->
+<!--{%for vzd in vzdelani5%}-->
+<!--    <ul>-->
+<!--        <li>-->
+<!--            {{vzd.nazev}}-->
+<!--        </li>-->
+<!--    </ul>-->
+<!--{%endfor%}-->
+
+
