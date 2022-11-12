@@ -1,6 +1,8 @@
 import random, time
-from django.shortcuts import render
-from django.http import HttpResponse
+from .forms import ContactForm
+from django.core.mail import send_mail, BadHeaderError
+from django.http import HttpResponse, HttpResponseRedirect
+from django.shortcuts import render, redirect
 from django.views import View
 from .models import *
 import aiohttp
@@ -68,6 +70,48 @@ class Uryvky(View):
         total_time = time.time() - starting_time
         print(total_time)
         return render(request, "index.html", context=context,)
+
+
+# class Contact(View):
+#     def get(self, request):
+#         informace = basicInfo.objects.all()
+#         default = basicInfo.get_info(basicInfo)
+#         context = {
+#             'informace': informace,
+#             'default': default,
+#             'form': EmailForm(),
+#         }
+#         if request.method == "POST":
+#             form = EmailForm(request.POST)
+#             if form.is_valid():
+#                 email = form.cleaned_data.get("email")
+#                 subject = form.cleaned_data.get("subject")
+#                 text = form.cleaned_data.get("text")
+#                 print(email, subject, text)
+#         return render(request, 'contact.html', context=context)
+
+
+# musim pres api
+def contactView(request):
+    if request.method == "GET":
+        form = ContactForm()
+    else:
+        form = ContactForm(request.POST)
+        if form.is_valid():
+            subject = form.cleaned_data["subject"]
+            from_email = form.cleaned_data["from_email"]
+            message = form.cleaned_data['message']
+            try:
+                send_mail(subject, message, from_email, ["vojtabern@gmail.com"])
+            except BadHeaderError:
+                return HttpResponse("Invalid header found.")
+            return redirect("success")
+    return render(request, "contact.html", {"form": form})
+
+def successView(request):
+    return HttpResponse("Success! Thank you for your message.")
+
+
 
 # Create your views here.
 

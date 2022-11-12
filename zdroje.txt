@@ -17,3 +17,5 @@ Uspech nacteni velkeho mnozstvi dat z api. Asynchroní funkce pouzity. obrazky v
 
 https://data-flair.training/blogs/create-quiz-application-python-django/
 https://stackoverflow.com/questions/63502002/django-how-to-do-scoring-in-a-quiz-app-with-multiple-attempts
+
+https://learndjango.com/tutorials/django-email-contact-form

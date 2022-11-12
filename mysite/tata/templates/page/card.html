@@ -5,18 +5,20 @@
         <div class="card-body">
             <p class="card-text">
                 <ul class="uryvky">
-                    <li>Mgr. Jan BERNARD</li>
-                    <li>psycholog a psychoterapeut</li>
-                    {% if num_info == 1 %}
-                        {%for informaci in informace%}
-                            <li><b>Provozovna:</b> {{ informaci.provozovna }}</li>
-                            <li><b>Telefon:</b> {{ informaci.telefon }}</li>
-                            <li><b>E-mail:</b> <a href="mailto:{{informaci.email}}">{{ informaci.email }}</a></li>
+                {% if num_info == 1 %}
+                    {%for informaci in informace%}
+                        <li>{{informaci.titul}}  {{informaci.name}} {{informaci.surrname}}</li>
+                        <li>psycholog a psychoterapeut</li>
+                        <li><b>Provozovna:</b> {{ informaci.provozovna }}</li>
+                        <li><b>Telefon:</b> {{ informaci.telefon }}</li>
+                        <li><b>E-mail:</b> <a href="mailto:{{informaci.email}}">{{ informaci.email }}</a></li>
                         {%endfor%}
                     {%else%}
-                            <li><b>Provozovna:</b> {{ default.0 }}</li>
-                            <li><b>Telefon:</b> {{default.1 }}</li>
-                            <li><b>E-mail:</b> <a href="mailto:{{default.2}}">{{default.2}}</a></li>
+                            <li>{{default.5}}  {{default.0}} {{default.1}}</li>
+                            <li>psycholog a psychoterapeut</li>
+                            <li><b>Provozovna:</b> {{ default.2 }}</li>
+                            <li><b>Telefon:</b> {{default.3 }}</li>
+                            <li><b>E-mail:</b> <a href="mailto:{{default.4}}">{{default.4}}</a></li>
                     {%endif%}
                 </ul>
             </p>
