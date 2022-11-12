@@ -9,5 +9,9 @@ admin.site.register(Client)
 admin.site.register(User)
 admin.site.register(Take)
 admin.site.register(Test)
+admin.site.register(Answers)
+admin.site.register(Questions)
+admin.site.register(TakeAnswers)
+
 
 # Register your models here.
