@@ -8,6 +8,10 @@ from .models import *
 import aiohttp
 from bs4 import BeautifulSoup #scraping
 import requests
+import os
+from sendgrid import SendGridAPIClient
+from sendgrid.helpers.mail import Mail
+
 
 
 class Index(View):
@@ -72,6 +76,10 @@ class Uryvky(View):
         return render(request, "index.html", context=context,)
 
 
+
+
+
+
 # class Contact(View):
 #     def get(self, request):
 #         informace = basicInfo.objects.all()
@@ -99,14 +107,26 @@ def contactView(request):
         form = ContactForm(request.POST)
         if form.is_valid():
             subject = form.cleaned_data["subject"]
-            from_email = form.cleaned_data["from_email"]
-            message = form.cleaned_data['message']
+            email = form.cleaned_data["from_email"]
+            from_email = "gridsend.kontakt@gmail.com"
+            to_email = "vojtabern@gmail.com"
+            text = form.cleaned_data['message']
+            subject = subject + ' || mail: ' + email
+            message = Mail(
+                from_email, to_email, subject, text
+            )
             try:
-                send_mail(subject, message, from_email, ["vojtabern@gmail.com"])
-            except BadHeaderError:
+                sg = SendGridAPIClient(os.environ.get('SENDGRID_API_KEY'))
+                response = sg.send(message)
+                # print(response.status_code)
+                # print(response.body)
+                # print(response.headers)
+            except Exception as e:
+                print(e.message)
                 return HttpResponse("Invalid header found.")
             return redirect("success")
     return render(request, "contact.html", {"form": form})
+
 
 def successView(request):
     return HttpResponse("Success! Thank you for your message.")
@@ -115,38 +135,3 @@ def successView(request):
 
 # Create your views here.
 
-# class Quotes(View):
-#     def get(self, request):
-#         n = 3
-#         for num in range(0, n):
-#             uryvek = Scrape.scrape_uryvky(Scrape, num)
-#         ahoj = () = (uryvek[0])
-#
-#         context = {
-#             'uryvek':ahoj,
-#         }
-#
-#         return render(request, 'card.html', context=context)
-
-
-# async def index(request):
-#     # task1 = asyncio.ensure_future(Scrape.scrape_uryvky(Scrape, "autor"))
-#     # task2 = asyncio.ensure_future(Scrape.scrape_uryvky(Scrape, "uryvek"))
-#     await asyncio.gather(Scrape.scrape_uryvky(Scrape, "autor"), Scrape.scrape_uryvky(Scrape, "uryvek"))
-#     return HttpResponse("e")
-    # informace = basicInfo.objects.all()
-    # num_info = basicInfo.objects.all().count()
-    # default = basicInfo.get_info(basicInfo)
-    # uryvek = (Scrape.scrape_uryvky(Scrape, "uryvek"))
-    # autor = (Scrape.scrape_uryvky(Scrape, "autor"))
-    # #mozna = sync_to_sync(Scrape.get_data(Scrape), thread_sensitive=False)
-    # context = {
-    #     #'mozna': mozna,
-    #     'informace':informace,
-    #     'default':default,
-    #     'num_info':num_info,
-    #     'uryvek':uryvek,
-    #     'autor':autor,
-    # }
-    #
-    # return render(request, 'index.html', context=context)

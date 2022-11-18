@@ -4,16 +4,21 @@
 
 <div class="container">
         <div class="row">
-            <form method="post">
-                {% csrf_token %}
-                {{ form.as_p }}
-                <div class="form-actions">
-                  <button type="submit">Send</button>
-                </div>
-            </form>
+            <div class="col-md-8">
+                <form method="post">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <div class="form-actions">
+                      <button type="submit">Send</button>
+                    </div>
+                </form>
+            </div>
+            <div class="col-md-4">
+            {% block card %}
+                {%include "page/card.html"%}
+            {%endblock%}
+            </div>
         </div>
 </div>
-        {% block card %}
-                {%include "page/card.html"%}
-        {%endblock%}
+
 {%endblock%}

@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 
 from pathlib import Path
 import os
+from sendgrid import SendGridAPIClient
+from sendgrid.helpers.mail import Mail
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -125,9 +127,8 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 # Default primary key field type
 
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
-DEFAULT_FROM_EMAIL = "vojtabern@gmail.com"
+DEFAULT_FROM_EMAIL = "gridsend.kontakt@gmail.com"
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST = "smtp.sendgrid.net"
-
 EMAIL_USE_TLS = True
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
