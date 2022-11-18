@@ -4,12 +4,37 @@
 
 <div class="container">
         <div class="row">
-            <div class="col-md-8">
+            <div class="col-md-8 mt-3">
                 <form method="post">
                     {% csrf_token %}
-                    {{ form.as_p }}
+                    <table>
+                        <tr>
+                            <th>
+                                <label for="email">Email </label>
+                            </th>
+                            <td id="email">
+                            {{ form.from_email }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>
+                                <label for="subjects">Předmět </label>
+                            </th>
+                            <td id="subjects">
+                            {{ form.subject }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>
+                                <label for="messages">Zpráva </label>
+                            </th>
+                            <td id="messages">
+                            {{ form.message }}
+                            </td>
+                        </tr>
+                    </table>
                     <div class="form-actions">
-                      <button type="submit">Send</button>
+                        <button type="submit">Odeslat</button>
                     </div>
                 </form>
             </div>
