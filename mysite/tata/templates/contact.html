@@ -1,10 +1,10 @@
 {%extends "base.html"%}
-
+{%load static%}
 {%block content%}
 
 <div class="container">
         <div class="row">
-            <div class="col-md-8 mt-3">
+            <div class="col-md-4 mt-3">
                 <form method="post">
                     {% csrf_token %}
                     <table>
@@ -33,10 +33,14 @@
                             </td>
                         </tr>
                     </table>
-                    <div class="form-actions">
-                        <button type="submit">Odeslat</button>
+                    <div class="form-actions  d-flex justify-content-end">
+                        <button class="button-primary" type="submit">Odeslat</button>
                     </div>
                 </form>
+            </div>
+            <!-- Vyřeš responzivitu-->
+            <div class="col-md-4 d-flex justify-content-center">
+                <img src ="{% static '/img/kontakt.svg' %}" alt="Nikdy to nevzdávej" width="100%"/>
             </div>
             <div class="col-md-4">
             {% block card %}
@@ -44,6 +48,11 @@
             {%endblock%}
             </div>
         </div>
+    <div class="row mt-5">
+        <div class="col-md-12 d-flex justify-content-center">
+            <iframe style="border: 3px solid black" src="https://frame.mapy.cz/s/borozocura" width="1000" height="400" frameborder="0"></iframe>
+        </div>
+    </div>
 </div>
 
 {%endblock%}
