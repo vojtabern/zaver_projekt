@@ -1,11 +1,10 @@
 {%load static %}
 
 <div class="card text-center border border-dark ">
-
         <div class="card-body">
             <p class="card-text">
                 <ul class="uryvky">
-                {% if num_info == 1 %}
+                {% if not async %}
                     {%for informaci in informace%}
                         <li>{{informaci.titul}}  {{informaci.name}} {{informaci.surrname}}</li>
                         <li>psycholog a psychoterapeut</li>
@@ -13,13 +12,13 @@
                         <li><b>Telefon:</b> {{ informaci.telefon }}</li>
                         <li><b>E-mail:</b> <a href="mailto:{{informaci.email}}">{{ informaci.email }}</a></li>
                         {%endfor%}
-                    {%else%}
-                            <li>{{default.5}}  {{default.0}} {{default.1}}</li>
-                            <li>psycholog a psychoterapeut</li>
-                            <li><b>Provozovna:</b> {{ default.2 }}</li>
-                            <li><b>Telefon:</b> {{default.3 }}</li>
-                            <li><b>E-mail:</b> <a href="mailto:{{default.4}}">{{default.4}}</a></li>
-                    {%endif%}
+                {%else%}
+                        <li>{{async_info.5}}  {{async_info.0}} {{async_info.1}}</li>
+                        <li>psycholog a psychoterapeut</li>
+                        <li><b>Provozovna:</b> {{ async_info.2 }}</li>
+                        <li><b>Telefon:</b> {{ async_info.3 }}</li>
+                        <li><b>E-mail:</b> <a href="mailto:{{async_info.4}}">{{ async_info.4 }}</a></li>
+                {%endif%}
                 </ul>
             </p>
         </div>

@@ -16,14 +16,7 @@ from sendgrid.helpers.mail import Mail
 
 class Index(View):
     def get(self, request):
-        informace = basicInfo.objects.all()
-        num_info = basicInfo.objects.all().count()
-        default = basicInfo.get_info(basicInfo)
-
         context = {
-            'informace':informace,
-            'default':default,
-            'num_info':num_info,
         }
         return render(request, 'index.html', context=context)
 
@@ -32,7 +25,6 @@ class Zivotopis(View):
     def get(self, request):
         vrat = Vzdelani.get_options(Vzdelani)
         vzdelani = Vzdelani.objects.all()
-
         context = {
             'vrat':vrat,
             'vzdelani': vzdelani,
@@ -42,14 +34,11 @@ class Zivotopis(View):
 
 class Sluzby(View):
     def get(self, request):
-        informace = basicInfo.objects.all()
-        default = basicInfo.get_info(basicInfo)
         context = {
-            'informace': informace,
-            'default': default,
         }
         return render(request, 'sluzby.html', context=context)
 
+from asgiref.sync import async_to_sync
 class Uryvky(View):
     async def get(self, request):
         #https://www.goodreads.com/api
@@ -60,43 +49,23 @@ class Uryvky(View):
                 data = await res.json()
                 for d in range(len(data)):
                     i = d
-                informace = basicInfo.objects.all()
-                default = basicInfo.get_info(basicInfo)
                 print(data[0]["q"])
                 rand = random.randrange(0, i)
-
+            #informace = await sync_to_async(basicInfo.objects.all())
+            async for info in basicInfo.objects.all():
+                # informace = {info.name:'name', info.surrname:'surrname', info.provozovna:'provozovna',
+                #              info.telefon:'telefon', info.email:'email', info.titul:'titul'}
+                informace = (info.name, info.surrname, info.provozovna,
+                              info.telefon, info.email, info.titul)
             context = {
                 "quote": data[rand]["q"],
                 "autor": data[rand]["a"],
-                'informace': informace,
-                'default': default,
+                "async_info": informace,
             }
         total_time = time.time() - starting_time
         print(total_time)
         return render(request, "index.html", context=context,)
 
-
-
-
-
-
-# class Contact(View):
-#     def get(self, request):
-#         informace = basicInfo.objects.all()
-#         default = basicInfo.get_info(basicInfo)
-#         context = {
-#             'informace': informace,
-#             'default': default,
-#             'form': EmailForm(),
-#         }
-#         if request.method == "POST":
-#             form = EmailForm(request.POST)
-#             if form.is_valid():
-#                 email = form.cleaned_data.get("email")
-#                 subject = form.cleaned_data.get("subject")
-#                 text = form.cleaned_data.get("text")
-#                 print(email, subject, text)
-#         return render(request, 'contact.html', context=context)
 
 
 # musim pres api
