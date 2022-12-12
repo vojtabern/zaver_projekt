@@ -38,33 +38,29 @@ class Sluzby(View):
         }
         return render(request, 'sluzby.html', context=context)
 
-from asgiref.sync import async_to_sync
-class Uryvky(View):
-    async def get(self, request):
-        #https://www.goodreads.com/api
-        starting_time = time.time()
-        URL = 'https://zenquotes.io/api/quotes/authors'
-        async with aiohttp.ClientSession() as session:
-            async with session.get(URL) as res:
-                data = await res.json()
-                for d in range(len(data)):
-                    i = d
-                print(data[0]["q"])
-                rand = random.randrange(0, i)
-            #informace = await sync_to_async(basicInfo.objects.all())
-            async for info in basicInfo.objects.all():
-                # informace = {info.name:'name', info.surrname:'surrname', info.provozovna:'provozovna',
-                #              info.telefon:'telefon', info.email:'email', info.titul:'titul'}
-                informace = (info.name, info.surrname, info.provozovna,
-                              info.telefon, info.email, info.titul)
-            context = {
-                "quote": data[rand]["q"],
-                "autor": data[rand]["a"],
-                "async_info": informace,
-            }
-        total_time = time.time() - starting_time
-        print(total_time)
-        return render(request, "index.html", context=context,)
+
+# class Uryvky(View):
+#     def get(self, request):
+#         starting_time = time.time()
+#         URL = 'https://zenquotes.io/api/quotes/authors'
+#         async with aiohttp.ClientSession() as session:
+#             async with session.get(URL) as res:
+#                 data = await res.json()
+#                 for d in range(len(data)):
+#                     i = d
+#                 rand = random.randrange(0, i)
+#             #informace = await sync_to_async(basicInfo.objects.all())
+#             async for info in basicInfo.objects.all():
+#                 informace = (info.name, info.surrname, info.provozovna,
+#                               info.telefon, info.email, info.titul)
+#             context = {
+#                 "quote": data[rand]["q"],
+#                 "autor": data[rand]["a"],
+#                 "async_info": informace,
+#             }
+#         total_time = time.time() - starting_time
+#         print(total_time)
+#         return render(request, "index.html", context=context,)
 
 
 
