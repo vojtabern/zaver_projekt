@@ -11,13 +11,6 @@ def get_information(request):
         return {}
 
 
-def check_async(request):
-  ctx = {}
-  if 'async' in request.get_full_path():
-    ctx['async'] = True
-  return ctx
-
-
 async def get_quotes():
     kill_me = {}
     URL = 'https://zenquotes.io/api/quotes/authors'

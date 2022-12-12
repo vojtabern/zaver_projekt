@@ -67,7 +67,6 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'tata.info.get_information',
-                'tata.info.check_async',
                 'tata.info.pokus',
             ],
         },
