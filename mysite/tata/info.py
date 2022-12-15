@@ -17,20 +17,24 @@ async def get_quotes():
     async with aiohttp.ClientSession() as session:
         async with session.get(URL) as res:
             data = await res.json()
-            for d in range(len(data)):
-                i = d
-            rand = random.randrange(0, i)
+
+            rand = random.randrange(0, len(data))
             kill_me.update({'quote':data[rand]["q"]})
             kill_me.update({'autor':data[rand]["a"]})
             print(kill_me)
+            if(rand > len(data)):
+                rand = len(data) - random.randrange(0, len(data)-1)
 
         await session.close()
+
         return kill_me
 
 
 def pokus(request):
     kokos = asyncio.run(get_quotes())
+
     print(kokos)
+
     return kokos
 
 # async def pokus(request):

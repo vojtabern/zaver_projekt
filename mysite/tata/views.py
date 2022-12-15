@@ -38,6 +38,12 @@ class Sluzby(View):
         }
         return render(request, 'sluzby.html', context=context)
 
+class Firmy(View):
+    def get(self, request):
+        context = {
+        }
+        return render(request, 'firms.html', context=context)
+
 
 # class Uryvky(View):
 #     def get(self, request):

@@ -1,0 +1,38 @@
+{%extends "base.html"%}
+
+{%block content%}
+{{uryvky}}
+<div class="container-fluid">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8">
+                <div class="jumbotron">
+                    <h3><b>Služby pro firmy a instituce</b></h3>
+                    <p class="lead">Nabízím: </p>
+                    <ul class="my-4">
+                        <li>Supervize týmu i jednotlivců.</li>
+                        <li>Diagnostika na určené pracovní pozice.</li>
+                        <li>Analýza pracovní pozice a jejich předpokladů.</li>
+                        <li>Nábor uchazečů – vyšetření osob v rámci zvolené funkce a profese.</li>
+                        <li>Zážitkové programy pro rozvoj profesních a osobnostních dovedností.</li>
+                        <li>Programy proti vyhoření, stresu a k posile soudržnosti.</li>
+                        <li>Práce s týmem.</li>
+                        <li>Analýza firemní kultury a jejího působení na zákazníka.</li>
+                        <li>Pomoc s marketingovou strategií a firemní identitou.</li>
+                        <li>Pomoc s prezentací projektů a image firmy.</li>
+                    </ul>
+                    <p class="lead">
+                        <a class="btn btn-primary btn-lg" href="{% url 'kontakt'%}" role="button">Chci se objednat</a>
+                    </p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                {% block card %}
+                    {%include "page/card.html"%}
+                {%endblock%}
+            </div>
+        </div>
+    </div>
+</div>
+
+{%endblock%}
