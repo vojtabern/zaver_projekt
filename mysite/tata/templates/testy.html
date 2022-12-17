@@ -1,0 +1,33 @@
+{%extends "base.html"%}
+{% load mathfilters %}
+{%block content%}
+
+<div class="container-fluid">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <h3>Psychologické testy</h3>
+                {% for test in object_list %}
+                    <div class="jumbotron">
+                        <h3><b>{{ test.title }}</b></h3>
+                        <p class="lead">Nabízím poradenství a terapii, pro pomoc v těžkých časech</p>
+                        <hr class="my-4">
+                        <p>Pro více informací o poradenství a psychologii klikněte <a href="#">zde</a></p>
+                        <p class="lead">
+                            <a class="btn btn-primary btn-lg" href="{% url 'kontakt'%}" role="button">Chci se objednat</a>
+                        </p>
+                    </div>
+                {% empty %}
+                    <h2>Ještě nebyly vytvořeny žádné testy</h2>
+                {% endfor %}
+                </div>
+<!--            <div class="col-md-4">-->
+<!--                {% block card %}-->
+<!--                    {%include "page/card.html"%}-->
+<!--                {%endblock%}-->
+<!--            </div>-->
+        </div>
+    </div>
+</div>
+
+{%endblock%}

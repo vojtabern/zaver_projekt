@@ -1,14 +1,15 @@
 from django.urls import path
 
 from tata.views import *
-from .views import contactView, successView
+from .views import MyFormView
 
 urlpatterns = [
     # path('async/', Uryvky.as_view(), name='index'),
     path('', Index.as_view(), name='index'),
     path('zivotopis/', Zivotopis.as_view(), name='vzdelani'),
     path('sluzby/', Sluzby.as_view(), name='sluzby'),
-    path('kontakt/', contactView, name='kontakt'),
+    path('kontakt/', MyFormView.as_view(), name='kontakt'),
     path('firmy/', Firmy.as_view(), name='firmy'),
-    path('success/', successView, name='success')
+    path('success/', MyFormView.as_view(), name='success'),
+    path('testy/', TestListView.as_view(), name='testy'),
 ]

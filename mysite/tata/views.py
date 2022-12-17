@@ -11,6 +11,8 @@ import requests
 import os
 from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import Mail
+from django.views.generic import ListView
+from django.utils import timezone
 
 
 
@@ -38,6 +40,7 @@ class Sluzby(View):
         }
         return render(request, 'sluzby.html', context=context)
 
+
 class Firmy(View):
     def get(self, request):
         context = {
@@ -45,37 +48,17 @@ class Firmy(View):
         return render(request, 'firms.html', context=context)
 
 
-# class Uryvky(View):
-#     def get(self, request):
-#         starting_time = time.time()
-#         URL = 'https://zenquotes.io/api/quotes/authors'
-#         async with aiohttp.ClientSession() as session:
-#             async with session.get(URL) as res:
-#                 data = await res.json()
-#                 for d in range(len(data)):
-#                     i = d
-#                 rand = random.randrange(0, i)
-#             #informace = await sync_to_async(basicInfo.objects.all())
-#             async for info in basicInfo.objects.all():
-#                 informace = (info.name, info.surrname, info.provozovna,
-#                               info.telefon, info.email, info.titul)
-#             context = {
-#                 "quote": data[rand]["q"],
-#                 "autor": data[rand]["a"],
-#                 "async_info": informace,
-#             }
-#         total_time = time.time() - starting_time
-#         print(total_time)
-#         return render(request, "index.html", context=context,)
+class MyFormView(View):
+    form_class = ContactForm
+    initial = {'key': 'value'}
+    template_name = 'contact.html'
 
+    def get(self, request, *args, **kwargs):
+        form = self.form_class(initial=self.initial)
+        return render(request, self.template_name, {'form': form})
 
-
-# musim pres api
-def contactView(request):
-    if request.method == "GET":
-        form = ContactForm()
-    else:
-        form = ContactForm(request.POST)
+    def post(self, request, *args, **kwargs):
+        form = self.form_class(request.POST)
         if form.is_valid():
             subject = form.cleaned_data["subject"]
             email = form.cleaned_data["from_email"]
@@ -94,13 +77,18 @@ def contactView(request):
                 print(response.headers)
             except Exception as e:
                 print(e.message)
-            return redirect("success")
-    return render(request, "contact.html", {"form": form})
-
-def successView(request):
-    return HttpResponse("Success! Thank you for your message.")
+            return HttpResponseRedirect('/success/')
+        return render(request, self.template_name, {'form': form})
 
 
+class TestListView(ListView):
+    model = Test
+    template_name = 'testy.html'
+
+    # def get_context_data(self, **kwargs):
+    #     context = super().get_context_data(**kwargs)
+    #     context['user_id'] = timezone.now()
+    #     return context
 
 # Create your views here.
 
