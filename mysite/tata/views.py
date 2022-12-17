@@ -11,8 +11,9 @@ import requests
 import os
 from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import Mail
-from django.views.generic import ListView
+from django.views.generic import ListView, DetailView
 from django.utils import timezone
+from django.shortcuts import get_object_or_404
 
 
 
@@ -83,12 +84,33 @@ class MyFormView(View):
 
 class TestListView(ListView):
     model = Test
+    context_object_name = 'test_list'
     template_name = 'testy.html'
 
     # def get_context_data(self, **kwargs):
-    #     context = super().get_context_data(**kwargs)
-    #     context['user_id'] = timezone.now()
+    #     # Call the base implementation first to get the context
+    #     context = super(TestListView, self).get_context_data(**kwargs)
+    #     # Create any data and add it to the context
+    #     context[''] = 'This is just some data'
     #     return context
+
+
+class TestDetail(DetailView):
+    model = Questions
+    template_name = 'questions.html'
+
+    def get_object(self, queryset=None):
+        return get_object_or_404(Questions, pk=self.kwargs['pk'], test_id=self.kwargs['test_id'])
+
+    def get_context_data(self, **kwargs):
+        # Call the base implementation first to get the context
+        context = super(TestDetail, self).get_context_data(**kwargs)
+        # Create any data and add it to the context
+        # jak to zrobit?
+        context['answer'] = Answers.objects.all()
+        return context
+
+
 
 # Create your views here.
 
