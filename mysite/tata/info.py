@@ -37,35 +37,4 @@ def pokus(request):
 
     return kokos
 
-# async def pokus(request):
-#     qoute = get_quotes()
-#     kokos = await qoute.__anext__()
-#     return kokos
-#
-#
-
-
-
-# async def get_qoutes(request):
-#     got = Uryvky.get(self="index", request=request)
-#     print(got)
-
-# async def quotes(request):
-#     if request=='GET':
-#         URL = 'https://zenquotes.io/api/quotes/authors'
-#         async with aiohttp.ClientSession() as session:
-#             async with session.get(URL) as res:
-#                 data = await res.json()
-#                 for d in range(len(data)):
-#                     i = d
-#                 print(data[0]["q"])
-#                 rand = random.randrange(0, i)
-#                 context = {
-#                     "quote": data[rand]["q"],
-#                     "autor": data[rand]["a"],
-#                 }
-#         return context
-#     else:
-#         return {}
-
 

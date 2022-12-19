@@ -12,5 +12,6 @@ urlpatterns = [
     path('firmy/', Firmy.as_view(), name='firmy'),
     path('success/', MyFormView.as_view(), name='success'),
     path('testy/', TestListView.as_view(), name='testy'),
-    path('testy/<test_id>/<int:pk>', TestDetail.as_view(), name='test'),
+    path('testy/<int:pk>', TestDetail.as_view(), name='test'),
+
 ]

@@ -9,9 +9,11 @@
   <div class="form-group">
     <label for="select">Vyber odpověd</label>
     <select class="form-control" id="select">
-      {%for val in answer%}
-      <option>{{val.value}}</option>
-    {%endfor%}
+      {%for ans in answer%}
+        {{ans.value}}
+      {%endfor%}
+      <option>{{answer.value}}</option>
+
     </select>
   </div>
 </form>

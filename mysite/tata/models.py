@@ -85,6 +85,7 @@ class basicInfo(models.Model):
 class Test(models.Model):
     title = models.CharField(max_length=50, null=None)
     user_id = models.ForeignKey(User, on_delete=models.CASCADE)
+    description = models.TextField(default="Zde napište o čem tento test je")
 
     class Meta:
         ordering = ["title"]

@@ -27,10 +27,14 @@ nav{
 .navbar .navbar-nav .nav-item .nav-link{
     border-right: 2px solid black;
 }
-
+body{
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
 footer{
     background-color: #ebedef;
-    margin-top: 5px;
+    margin-top: auto;
 }
 
 .bg-cover {
@@ -53,3 +57,4 @@ footer{
     padding: 0 0.5em;
   }
 }
+

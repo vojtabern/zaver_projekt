@@ -1,5 +1,6 @@
 import random, time
-from .forms import ContactForm
+
+from .forms import ContactForm, UserId
 from django.core.mail import send_mail, BadHeaderError
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect
@@ -84,9 +85,23 @@ class MyFormView(View):
 
 class TestListView(ListView):
     model = Test
+    form_class = UserId
     context_object_name = 'test_list'
     template_name = 'testy.html'
+    initial = {'key': 'value'}
 
+#nevim nevim
+    def get(self, request, *args, **kwargs):
+        form = self.form_class(initial=self.initial)
+        return render(request, self.template_name, {'form': form, 'test_list': self.model.objects.all()})
+
+    def post(self, request, *args, **kwargs):
+        form = self.form_class(request.POST)
+        if form.is_valid():
+            user = form.cleaned_data["user"]
+            u = User(email=user)
+            u.save()
+        return render(request, self.template_name, {'form': form, 'test_list': self.model.objects.all(), 'user':user})
     # def get_context_data(self, **kwargs):
     #     # Call the base implementation first to get the context
     #     context = super(TestListView, self).get_context_data(**kwargs)
@@ -96,21 +111,15 @@ class TestListView(ListView):
 
 
 class TestDetail(DetailView):
-    model = Questions
-    template_name = 'questions.html'
-
-    def get_object(self, queryset=None):
-        return get_object_or_404(Questions, pk=self.kwargs['pk'], test_id=self.kwargs['test_id'])
+    model = Test
+    context_object_name = 'test'
+    template_name = 'test.html'
 
     def get_context_data(self, **kwargs):
-        # Call the base implementation first to get the context
         context = super(TestDetail, self).get_context_data(**kwargs)
-        # Create any data and add it to the context
-        # jak to zrobit?
-        context['answer'] = Answers.objects.all()
+        #Create any data and add it to the context
+        context['num'] = Questions.objects.all().filter(test_id=self.kwargs["pk"]).count()
         return context
 
 
-
-# Create your views here.
 

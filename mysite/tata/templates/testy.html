@@ -10,12 +10,18 @@
                 {% for test in test_list %}
                     <div class="jumbotron">
                         <h3><b>{{ test.title }}</b></h3>
-                        <p class="lead">Nabízím poradenství a terapii, pro pomoc v těžkých časech</p>
+                        <p class="lead">{{test.description}}</p>
                         <hr class="my-4">
 
                         <p class="lead">
-                            <a class="btn btn-primary btn-lg" href="{% url 'kontakt'%}" role="button">Spustit test</a>
+
                         </p>
+                        <form method="post">
+                            {% csrf_token %}
+                            {{form.user}}
+                            <input type="submit"/>
+                        </form>
+                        <a class="btn btn-lg btn-primary" href="{% url 'test' test.id%}" role="button">Spustit test</a>
                     </div>
                 {% empty %}
                     <h2>Ještě nebyly vytvořeny žádné testy</h2>
