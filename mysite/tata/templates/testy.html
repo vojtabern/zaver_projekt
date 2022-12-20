@@ -3,10 +3,21 @@
 {%block content%}
 
 <div class="container-fluid">
+    {% if messages %}
+            {% for message in messages %}
+                 <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert" id="message">
+                  {{ message }}
+                  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                   <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+            {% endfor %}
+        {% endif %}
     <div class="container">
         <div class="row">
             <div class="col-md-12">
                 <h3>Psychologické testy</h3>
+                <p style="color: red;" id="exists"></p>
                 {% for test in test_list %}
                     <div class="jumbotron">
                         <h3><b>{{ test.title }}</b></h3>
@@ -35,10 +46,6 @@
         </div>
     </div>
 </div>
-<!--<script>-->
-<!--    document.getElementById("Btn").alert = "You clicked the button!";-->
 
-<!--    alert('{{ message }};-->
-<!--</script>-->
 
 {%endblock%}

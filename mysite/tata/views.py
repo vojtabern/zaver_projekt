@@ -15,7 +15,7 @@ from sendgrid.helpers.mail import Mail
 from django.views.generic import ListView, DetailView
 from django.utils import timezone
 from django.shortcuts import get_object_or_404
-
+from django.contrib import messages
 
 
 class Index(View):
@@ -96,6 +96,7 @@ class TestDetail(DetailView):
         return context
 
 
+
 class TestListView(ListView):
     model = Test
     form_class = User_Id
@@ -124,18 +125,14 @@ class TestListView(ListView):
                 u = User(email=user)
                 u.save()
             else:
-                return render(request, 'testy.html', {'message':'Daný uživatel již existuje'})
-
+                messages.warning(request, 'Omlouváme se, ale daný uživatel již existuje')
+                # return TestListView.as_view()(request, {'message':'Daný uživatel již existuje'})
+                return redirect('testy')
         else:
-            return HttpResponse("Zabij mě")
-        return HttpResponse("Uspech")
+            messages.info(request, 'Nesprávně vyplněný email')
+            #musim dostavat pk z id od testu
+        return redirect('test', pk=1)
         #return TestDetail.as_view()(request)
-    # def get_context_data(self, **kwargs):
-    #     # Call the base implementation first to get the context
-    #     context = super(TestListView, self).get_context_data(**kwargs)
-    #     # Create any data and add it to the context
-    #     context[''] = 'This is just some data'
-    #     return context
 
 
 
