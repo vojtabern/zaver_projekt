@@ -1,6 +1,6 @@
 import random, time
 
-from .forms import ContactForm, UserId
+from .forms import ContactForm, User_Id
 from django.core.mail import send_mail, BadHeaderError
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect
@@ -80,35 +80,9 @@ class MyFormView(View):
             except Exception as e:
                 print(e.message)
             return HttpResponseRedirect('/success/')
+        else:
+            form = ContactForm()
         return render(request, self.template_name, {'form': form})
-
-
-class TestListView(ListView):
-    model = Test
-    form_class = UserId
-    context_object_name = 'test_list'
-    template_name = 'testy.html'
-    initial = {'key': 'value'}
-
-#nevim nevim
-    def get(self, request, *args, **kwargs):
-        form = self.form_class(initial=self.initial)
-        return render(request, self.template_name, {'form': form, 'test_list': self.model.objects.all()})
-
-    def post(self, request, *args, **kwargs):
-        form = self.form_class(request.POST)
-        if form.is_valid():
-            user = form.cleaned_data["user"]
-            u = User(email=user)
-            u.save()
-        return render(request, self.template_name, {'form': form, 'test_list': self.model.objects.all(), 'user':user})
-    # def get_context_data(self, **kwargs):
-    #     # Call the base implementation first to get the context
-    #     context = super(TestListView, self).get_context_data(**kwargs)
-    #     # Create any data and add it to the context
-    #     context[''] = 'This is just some data'
-    #     return context
-
 
 class TestDetail(DetailView):
     model = Test
@@ -120,6 +94,51 @@ class TestDetail(DetailView):
         #Create any data and add it to the context
         context['num'] = Questions.objects.all().filter(test_id=self.kwargs["pk"]).count()
         return context
+
+
+class TestListView(ListView):
+    model = Test
+    form_class = User_Id
+    context_object_name = 'test_list'
+    template_name = 'testy.html'
+    initial = {'key': 'value'}
+    control = []
+
+    def get(self, request, *args, **kwargs):
+        form = self.form_class(initial=self.initial)
+        return render(request, self.template_name, {'form': form, 'test_list': self.model.objects.all()})
+
+
+    def post(self, request, *args, **kwargs):
+        form = self.form_class(request.POST)
+        kontrola = []
+        for i in User.objects.values():
+            kontrola.append(i)
+        for i in kontrola:
+            self.control.append(i['email'])
+            print(i['email'])
+        if form.is_valid():
+            user = form.cleaned_data['user']
+            if user not in self.control:
+                print(form.cleaned_data['user'])
+                u = User(email=user)
+                u.save()
+            else:
+                return render(request, 'testy.html', {'message':'Daný uživatel již existuje'})
+
+        else:
+            return HttpResponse("Zabij mě")
+        return HttpResponse("Uspech")
+        #return TestDetail.as_view()(request)
+    # def get_context_data(self, **kwargs):
+    #     # Call the base implementation first to get the context
+    #     context = super(TestListView, self).get_context_data(**kwargs)
+    #     # Create any data and add it to the context
+    #     context[''] = 'This is just some data'
+    #     return context
+
+
+
 
 
 

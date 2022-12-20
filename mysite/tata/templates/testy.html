@@ -21,7 +21,7 @@
                             {{form.user}}
                             <input type="submit"/>
                         </form>
-                        <a class="btn btn-lg btn-primary" href="{% url 'test' test.id%}" role="button">Spustit test</a>
+                        <a id="Btn" class="btn btn-lg btn-primary" href="{% url 'test' test.id%}" role="button">Spustit test</a>
                     </div>
                 {% empty %}
                     <h2>Ještě nebyly vytvořeny žádné testy</h2>
@@ -35,5 +35,10 @@
         </div>
     </div>
 </div>
+<!--<script>-->
+<!--    document.getElementById("Btn").alert = "You clicked the button!";-->
+
+<!--    alert('{{ message }};-->
+<!--</script>-->
 
 {%endblock%}
