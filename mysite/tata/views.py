@@ -84,16 +84,7 @@ class MyFormView(View):
             form = ContactForm()
         return render(request, self.template_name, {'form': form})
 
-class TestDetail(DetailView):
-    model = Test
-    context_object_name = 'test'
-    template_name = 'test.html'
 
-    def get_context_data(self, **kwargs):
-        context = super(TestDetail, self).get_context_data(**kwargs)
-        #Create any data and add it to the context
-        context['num'] = Questions.objects.all().filter(test_id=self.kwargs["pk"]).count()
-        return context
 
 
 
@@ -104,6 +95,7 @@ class TestListView(ListView):
     template_name = 'testy.html'
     initial = {'key': 'value'}
     control = []
+    num = 1
 
     def get(self, request, *args, **kwargs):
         form = self.form_class(initial=self.initial)
@@ -111,8 +103,7 @@ class TestListView(ListView):
 
     def post(self, request, *args, **kwargs):
         form = self.form_class(request.POST)
-        num = request.POST.get("number")
-        print(num)
+        self.num = request.POST.get("number")
         kontrola = []
         for i in User.objects.values():
             kontrola.append(i)
@@ -125,18 +116,32 @@ class TestListView(ListView):
                 print(form.cleaned_data['user'])
                 u = User(email=user)
                 u.save()
-                u = Take(user_id=User.objects.get(email=user), test_id=Test.objects.get(pk=num))
+                u = Take(user_id=User.objects.get(email=user), test_id=Test.objects.get(pk=self.num))
                 print(u)
                 u.save()
-                return redirect('test', pk=num)
+                return redirect('test', pk=self.num, user=user)
             else:
                 messages.warning(request, 'Omlouváme se, ale daný uživatel již existuje')
                 return redirect('testy')
         else:
             messages.info(request, 'Nesprávně vyplněný email')
 
-        return redirect('test', pk=num)
+        return redirect('test', pk=self.num)
 
+
+class TestDetail(DetailView):
+    model = Test
+    context_object_name = 'test'
+    template_name = 'test.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(TestDetail, self).get_context_data(**kwargs)
+        #Create any data and add it to the context
+        context['num'] = Questions.objects.all().filter(test_id=self.kwargs["pk"]).count()
+        # print(Take.objects.get(user_id="num"))
+        # EMAIL SE MUSÍ NĚJAK BRÁT Z USER MODELU, DLE ID...
+        context['user'] = Take.objects.get(user_id=User.objects.get(email="vojtabern70@gmail.com").id)
+        return context
 
 
 
