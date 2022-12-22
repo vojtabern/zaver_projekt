@@ -109,9 +109,10 @@ class TestListView(ListView):
         form = self.form_class(initial=self.initial)
         return render(request, self.template_name, {'form': form, 'test_list': self.model.objects.all()})
 
-
     def post(self, request, *args, **kwargs):
         form = self.form_class(request.POST)
+        num = request.POST.get("number")
+        print(num)
         kontrola = []
         for i in User.objects.values():
             kontrola.append(i)
@@ -124,15 +125,17 @@ class TestListView(ListView):
                 print(form.cleaned_data['user'])
                 u = User(email=user)
                 u.save()
+                u = Take(user_id=User.objects.get(email=user), test_id=Test.objects.get(pk=num))
+                print(u)
+                u.save()
+                return redirect('test', pk=num)
             else:
                 messages.warning(request, 'Omlouváme se, ale daný uživatel již existuje')
-                # return TestListView.as_view()(request, {'message':'Daný uživatel již existuje'})
                 return redirect('testy')
         else:
             messages.info(request, 'Nesprávně vyplněný email')
-            #musim dostavat pk z id od testu
-        return redirect('test', pk=1)
-        #return TestDetail.as_view()(request)
+
+        return redirect('test', pk=num)
 
 
 
