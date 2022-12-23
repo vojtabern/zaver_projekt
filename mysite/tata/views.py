@@ -139,8 +139,8 @@ class TestDetail(DetailView):
         #Create any data and add it to the context
         context['num'] = Questions.objects.all().filter(test_id=self.kwargs["pk"]).count()
         # print(Take.objects.get(user_id="num"))
-        # EMAIL SE MUSÍ NĚJAK BRÁT Z USER MODELU, DLE ID...
-        context['user'] = Take.objects.get(user_id=User.objects.get(email="vojtabern70@gmail.com").id)
+        context['user'] = Take.objects.filter(test_id = self.kwargs["pk"])
+        # print(Take.objects.filter(test_id=self.kwargs["pk"]))
         return context
 
 

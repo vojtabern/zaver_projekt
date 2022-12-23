@@ -31,7 +31,7 @@
                             {% csrf_token %}
                             {{form.user}}
                             <input hidden id="number" name="number" value="{{ forloop.counter }}" readonly />
-                            <input type="submit"/>
+                            <input value="Spustit" type="submit"/>
                         </form>
                     </div>
                 {% empty %}
