@@ -17,7 +17,7 @@ from django.utils import timezone
 from django.shortcuts import get_object_or_404
 from django.contrib import messages
 from tata.tests import Ans
-
+from django.forms.models import model_to_dict
 
 class Index(View):
     def get(self, request):
@@ -80,7 +80,8 @@ class MyFormView(View):
                 print(response.headers)
             except Exception as e:
                 print(e.message)
-            return HttpResponseRedirect('/success/')
+            messages.info(request, 'Email úspěšně odeslán')
+            return redirect('kontakt')
         else:
             form = ContactForm()
         return render(request, self.template_name, {'form': form})
@@ -114,12 +115,16 @@ class TestListView(ListView):
         if form.is_valid():
             user = form.cleaned_data['user']
             if user not in self.control:
+
+                request.session["user"] = user
+                request.session.set_expiry(60)
                 print(form.cleaned_data['user'])
                 u = User(email=user)
                 u.save()
-                u = Take(user_id=User.objects.get(email=user), test_id=Test.objects.get(pk=self.num))
-                print(u)
-                u.save()
+                test = Take(user_id=User.objects.get(email=user), test_id=Test.objects.get(pk=self.num))
+                print(test)
+                # request.session["test"] = test
+                test.save()
                 return redirect('test', pk=self.num, user=user)
             else:
                 messages.warning(request, 'Omlouváme se, ale daný uživatel již existuje')
@@ -135,7 +140,6 @@ class TestDetail(DetailView):
     context_object_name = 'test'
     template_name = 'test.html'
 
-
     def get_context_data(self, **kwargs):
         context = super(TestDetail, self).get_context_data(**kwargs)
         #Create any data and add it to the context
@@ -147,23 +151,35 @@ class TestDetail(DetailView):
 
 
 class Question(DetailView):
-    model = Questions
+    model = Answers
     context_object_name = 'question'
-    template_name='questions.html'
+    template_name = 'questions.html'
     form_class = Ans
     initial = {'key': 'value'}
 
+# Nefunkční
     def get(self, request, *args, **kwargs):
         form = self.form_class(initial=self.initial)
-        return render(request, self.template_name, {'form': form, 'question': self.model.objects.all()})
-
+        request.session["quest"] = model_to_dict(Questions.objects.get(id=self.kwargs["pk"]))
+        #request.session["pokus"] = model_to_dict(TakeAnswers.objects.get(take_id=Take.objects.get(id=self.kwargs["pk"])))
+        if 'quest' in request.session:
+            info = request.session['quest']
+            return render(request, self.template_name, {"form":form})
+            # return render(request, self.template_name, {'form': form, 'question':Questions.objects.get(id=self.kwargs["pk"]),
+            #                                             'test': Test.objects.get(id=info["test_id"])})
+        return render(request, self.template_name, {'form': form, 'test': Test.objects.filter(id=self.kwargs["pk"]),
+                                                    'question': Questions.objects.filter(
+                                                        test_id=self.kwargs["pk"], id=self.kwargs["pk"])})
+#vyrejioaehjkgehukvse
     def post(self, request, *args, **kwargs):
         form = self.form_class(request.POST)
+
         if form.is_valid():
             answer = form.cleaned_data['ans']
-
+            # request.session["ans"] = answer
         else:
             form = Ans()
+        return render(request, self.template_name, {'form': form, 'question': self.model.objects.all()})
 
     # def get_context_data(self, **kwargs):
     #     context = super(Question, self).get_context_data(**kwargs)
