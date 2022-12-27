@@ -16,6 +16,7 @@ from django.views.generic import ListView, DetailView
 from django.utils import timezone
 from django.shortcuts import get_object_or_404
 from django.contrib import messages
+from tata.tests import Ans
 
 
 class Index(View):
@@ -134,6 +135,7 @@ class TestDetail(DetailView):
     context_object_name = 'test'
     template_name = 'test.html'
 
+
     def get_context_data(self, **kwargs):
         context = super(TestDetail, self).get_context_data(**kwargs)
         #Create any data and add it to the context
@@ -142,6 +144,36 @@ class TestDetail(DetailView):
         context['user'] = Take.objects.filter(test_id = self.kwargs["pk"])
         # print(Take.objects.filter(test_id=self.kwargs["pk"]))
         return context
+
+
+class Question(DetailView):
+    model = Questions
+    context_object_name = 'question'
+    template_name='questions.html'
+    form_class = Ans
+    initial = {'key': 'value'}
+
+    def get(self, request, *args, **kwargs):
+        form = self.form_class(initial=self.initial)
+        return render(request, self.template_name, {'form': form, 'question': self.model.objects.all()})
+
+    def post(self, request, *args, **kwargs):
+        form = self.form_class(request.POST)
+        if form.is_valid():
+            answer = form.cleaned_data['ans']
+
+        else:
+            form = Ans()
+
+    # def get_context_data(self, **kwargs):
+    #     context = super(Question, self).get_context_data(**kwargs)
+    #     # Create any data and add it to the context
+    #     context['test'] = Take.objects.all().filter(test_id=self.kwargs["pk"])
+    #     # print(Take.objects.get(user_id="num"))
+    #     context['user'] = Take.objects.filter(test_id=self.kwargs["pk"])
+    #     # context['answer'] = Answers.objects.filter(question_id=self.kwargs["pk"], test_id=self.kwargs["pk"])
+    #     # print(Take.objects.filter(test_id=self.kwargs["pk"]))
+    #     return context
 
 
 
