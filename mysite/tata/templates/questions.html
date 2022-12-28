@@ -1,16 +1,11 @@
 {%extends "testBase.html"%}
 
 {%block content%}
-{{ request.session.user }}
-id: {{ request.session.quest.id }}
-otazka: {{ request.session.quest.question }}
-test id: {{ request.session.quest.test_id }}
-<p>
-  {{ request.session.pokus }}
-</p>
+
+{{question}}
 <form>
   {%csrf_token%}
-    {{question}}
+    {{question.question}}
 
   {{form.answer}}
   <input value="Další otázka" type="submit"/>

@@ -151,25 +151,28 @@ class TestDetail(DetailView):
 
 
 class Question(DetailView):
-    model = Answers
+    model = Questions
     context_object_name = 'question'
     template_name = 'questions.html'
     form_class = Ans
     initial = {'key': 'value'}
 
+
 # Nefunkční
     def get(self, request, *args, **kwargs):
         form = self.form_class(initial=self.initial)
-        request.session["quest"] = model_to_dict(Questions.objects.get(id=self.kwargs["pk"]))
-        #request.session["pokus"] = model_to_dict(TakeAnswers.objects.get(take_id=Take.objects.get(id=self.kwargs["pk"])))
-        if 'quest' in request.session:
-            info = request.session['quest']
-            return render(request, self.template_name, {"form":form})
-            # return render(request, self.template_name, {'form': form, 'question':Questions.objects.get(id=self.kwargs["pk"]),
-            #                                             'test': Test.objects.get(id=info["test_id"])})
-        return render(request, self.template_name, {'form': form, 'test': Test.objects.filter(id=self.kwargs["pk"]),
-                                                    'question': Questions.objects.filter(
-                                                        test_id=self.kwargs["pk"], id=self.kwargs["pk"])})
+
+        print(Test.objects.all().filter(id=self.kwargs.get('test', None)))
+        kokos = Test.objects.all().filter(id=self.kwargs.get('test', None))
+        for i in kokos:
+            print(i.id)
+            # self.otazky["id"] = model_to_dict(self.model.objects.all().filter(test_id=i.id), fields=[field.name for field in instance._meta.fields])
+            otazky = self.model.objects.all().filter(test_id=i.id).values()
+            print(i.title)
+        print(otazky)
+        print(otazky[self.kwargs.get('pk', None)-1])
+        return render(request, self.template_name, {"form": form, "question":otazky[self.kwargs.get('pk', None)-1]})
+
 #vyrejioaehjkgehukvse
     def post(self, request, *args, **kwargs):
         form = self.form_class(request.POST)
