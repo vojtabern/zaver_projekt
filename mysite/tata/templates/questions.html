@@ -11,8 +11,6 @@
   {%csrf_token%}
   <p>Otazka: {{question}}</p>
   {{form.answer}}
-  <h6>{{mozne}}</h6>
-        <a href="{% url 'question' test=test.id user=user pk=mozne  %}">Další otázka: </a>
   <input value="Další otázka" type="submit"/>
 </form>
 

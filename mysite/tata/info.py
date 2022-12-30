@@ -21,7 +21,6 @@ async def get_quotes():
             rand = random.randrange(0, len(data))
             kill_me.update({'quote':data[rand]["q"]})
             kill_me.update({'autor':data[rand]["a"]})
-            print(kill_me)
             if(rand > len(data)):
                 rand = len(data) - random.randrange(0, len(data)-1)
 
@@ -33,7 +32,6 @@ async def get_quotes():
 def pokus(request):
     kokos = asyncio.run(get_quotes())
 
-    print(kokos)
 
     return kokos
 
