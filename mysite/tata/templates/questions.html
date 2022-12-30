@@ -1,13 +1,18 @@
 {%extends "testBase.html"%}
 
 {%block content%}
+{{test}}
 
 {{question}}
 <form>
   {%csrf_token%}
-    {{question.question}}
-
+  {%for q in question%}
+  {%if q.test_id_id == test %}
+    <p>{{q.question}}</p>
   {{form.answer}}
+  {%endif%}
+  {%endfor%}
+
   <input value="Další otázka" type="submit"/>
 </form>
 

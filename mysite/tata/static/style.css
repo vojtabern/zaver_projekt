@@ -58,3 +58,29 @@ footer{
   }
 }
 
+
+.seznam{
+    background-image: url("/static/img/maninsuit.png");
+    background-repeat: no-repeat;
+    background-position: top right;
+    background-size: contain;
+    opacity: 0.75
+}
+
+div.trans {
+    background-color: #e9ecef;
+    color: #000000;
+}
+
+div.trans ul {
+  font-weight: bold;
+  color: #000080;
+  opacity: 1
+}
+
+
+
+div.cont {
+    color: #010000;
+}
+

@@ -1,11 +1,11 @@
 from django import forms
 
 ANS = (
-    ("1", "Ne"),
-    ("2", "Spíše ne"),
+    ("-2", "Ne"),
+    ("-1", "Spíše ne"),
     ("0", "nevím"),
-    ("4", "Spíše ano"),
-    ("5", "Ano"),
+    ("1", "Spíše ano"),
+    ("2", "Ano"),
 )
 
 

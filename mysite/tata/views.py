@@ -79,12 +79,12 @@ class MyFormView(View):
                 print(response.body)
                 print(response.headers)
             except Exception as e:
-                print(e.message)
+                print(e.massage)
             messages.info(request, 'Email úspěšně odeslán')
             return redirect('kontakt')
         else:
             form = ContactForm()
-        return render(request, self.template_name, {'form': form})
+        return redirect('kontakt')
 
 
 
@@ -97,11 +97,15 @@ class TestListView(ListView):
     template_name = 'testy.html'
     initial = {'key': 'value'}
     control = []
-    num = 1
 
     def get(self, request, *args, **kwargs):
         form = self.form_class(initial=self.initial)
-        return render(request, self.template_name, {'form': form, 'test_list': self.model.objects.all()})
+        kokos = Test.objects.all().values()
+        print(kokos)
+        if kokos == None:
+            messages.warning(request, 'Omlouváme se, ale ještě nebyly vytvořeny žádné testy')
+            return redirect('test', pk=self.kwargs["pk"])
+        return render(request, self.template_name, {'form': form, "test":kokos})
 
     def post(self, request, *args, **kwargs):
         form = self.form_class(request.POST)
@@ -115,15 +119,11 @@ class TestListView(ListView):
         if form.is_valid():
             user = form.cleaned_data['user']
             if user not in self.control:
-
                 request.session["user"] = user
                 request.session.set_expiry(60)
-                print(form.cleaned_data['user'])
                 u = User(email=user)
                 u.save()
                 test = Take(user_id=User.objects.get(email=user), test_id=Test.objects.get(pk=self.num))
-                print(test)
-                # request.session["test"] = test
                 test.save()
                 return redirect('test', pk=self.num, user=user)
             else:
@@ -131,7 +131,6 @@ class TestListView(ListView):
                 return redirect('testy')
         else:
             messages.info(request, 'Nesprávně vyplněný email')
-
         return redirect('test', pk=self.num)
 
 
@@ -157,42 +156,39 @@ class Question(DetailView):
     form_class = Ans
     initial = {'key': 'value'}
 
-
-# Nefunkční
     def get(self, request, *args, **kwargs):
         form = self.form_class(initial=self.initial)
+        otazky = []
+        kokos = Questions.objects.all().values()
 
-        print(Test.objects.all().filter(id=self.kwargs.get('test', None)))
-        kokos = Test.objects.all().filter(id=self.kwargs.get('test', None))
+
+        if self.kwargs.get('pk', None) is not None:
+            kokos = self.model.objects.all().filter(test_id=self.kwargs.get('pk', None)).values()
         for i in kokos:
-            print(i.id)
-            # self.otazky["id"] = model_to_dict(self.model.objects.all().filter(test_id=i.id), fields=[field.name for field in instance._meta.fields])
-            otazky = self.model.objects.all().filter(test_id=i.id).values()
-            print(i.title)
+            otazky.append(i)
         print(otazky)
-        print(otazky[self.kwargs.get('pk', None)-1])
-        return render(request, self.template_name, {"form": form, "question":otazky[self.kwargs.get('pk', None)-1]})
+        return render(request, self.template_name, {"form": form, "question": kokos,
+                                                    "test": self.kwargs.get('pk', None)})
 
-#vyrejioaehjkgehukvse
     def post(self, request, *args, **kwargs):
         form = self.form_class(request.POST)
 
         if form.is_valid():
             answer = form.cleaned_data['ans']
-            # request.session["ans"] = answer
+            request.session["ans"] = answer
         else:
             form = Ans()
         return render(request, self.template_name, {'form': form, 'question': self.model.objects.all()})
 
-    # def get_context_data(self, **kwargs):
-    #     context = super(Question, self).get_context_data(**kwargs)
-    #     # Create any data and add it to the context
-    #     context['test'] = Take.objects.all().filter(test_id=self.kwargs["pk"])
-    #     # print(Take.objects.get(user_id="num"))
-    #     context['user'] = Take.objects.filter(test_id=self.kwargs["pk"])
-    #     # context['answer'] = Answers.objects.filter(question_id=self.kwargs["pk"], test_id=self.kwargs["pk"])
-    #     # print(Take.objects.filter(test_id=self.kwargs["pk"]))
-    #     return context
+        # def get_context_data(self, **kwargs):
+        #     context = super(Question, self).get_context_data(**kwargs)
+        #     # Create any data and add it to the context
+        #     context['test'] = Take.objects.all().filter(test_id=self.kwargs["pk"])
+        #     # print(Take.objects.get(user_id="num"))
+        #     context['user'] = Take.objects.filter(test_id=self.kwargs["pk"])
+        #     # context['answer'] = Answers.objects.filter(question_id=self.kwargs["pk"], test_id=self.kwargs["pk"])
+        #     # print(Take.objects.filter(test_id=self.kwargs["pk"]))
+        #     return context
 
 
 

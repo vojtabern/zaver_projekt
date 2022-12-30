@@ -18,10 +18,10 @@
             <div class="col-md-12">
                 <h3>Psychologické testy</h3>
                 <p style="color: red;" id="exists"></p>
-                {% for test in test_list reversed%}
+                {% for t in test%}
                     <div class="jumbotron">
-                        <h3><b>{{ test.title }}</b></h3>
-                        <p class="lead">{{test.description}}</p>
+                        <h3><b>{{ t.title }}</b></h3>
+                        <p class="lead">{{t.description}}</p>
                         <hr class="my-4">
 
                         <p class="lead">
@@ -30,7 +30,7 @@
                         <form method="post">
                             {% csrf_token %}
                             {{form.user}}
-                            <input hidden id="number" name="number" value="{{ forloop.counter }}" readonly />
+                            <input hidden id="number" name="number" value="{{t.id}}" readonly />
                             <input value="Spustit" type="submit"/>
                         </form>
                     </div>

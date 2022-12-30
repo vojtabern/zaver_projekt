@@ -1,14 +1,16 @@
 {%extends "base.html"%}
-
 {%block content%}
-{{uryvky}}
+
 <div class="container-fluid">
     <div class="container">
         <div class="row">
             <div class="col-md-8">
                 <div class="jumbotron">
+                    <div class="trans">
+                        <div class="seznam">
                     <h3><b>Služby pro firmy a instituce</b></h3>
                     <p class="lead">Nabízím: </p>
+
                     <ul class="my-4">
                         <li>Supervize týmu i jednotlivců.</li>
                         <li>Diagnostika na určené pracovní pozice.</li>
@@ -24,6 +26,8 @@
                     <p class="lead">
                         <a class="btn btn-primary btn-lg" href="{% url 'kontakt'%}" role="button">Chci se objednat</a>
                     </p>
+                            </div>
+                    </div>
                 </div>
             </div>
             <div class="col-md-4">
