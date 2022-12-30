@@ -1,18 +1,18 @@
 {%extends "testBase.html"%}
 
 {%block content%}
-{{test}}
+<p>Test: {{test.title}}</p>
 
-{{question}}
-<form>
+<p> <i>
+  {{questions}}</i>
+
+</p>
+<form method="post">
   {%csrf_token%}
-  {%for q in question%}
-  {%if q.test_id_id == test %}
-    <p>{{q.question}}</p>
+  <p>Otazka: {{question}}</p>
   {{form.answer}}
-  {%endif%}
-  {%endfor%}
-
+  <h6>{{mozne}}</h6>
+        <a href="{% url 'question' test=test.id user=user pk=mozne  %}">Další otázka: </a>
   <input value="Další otázka" type="submit"/>
 </form>
 
