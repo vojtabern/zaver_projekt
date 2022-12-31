@@ -157,6 +157,7 @@ class Question(DetailView):
     initial = {'key': 'value'}
     odpovedi = []
     vyplnene = []
+    kontrola = True
 
     def get_context_data(self,*args, **kwargs):
         mozne = []
@@ -190,34 +191,55 @@ class Question(DetailView):
         if form.is_valid():
             mozne.append(self.model.objects.filter(test_id=test_id).values())
             answer = form.cleaned_data['answer']
-            for j in mozne:
-                for q in j:
-                    if q["test_id_id"] == test_id.id and q["id"] != self.model.objects.get(id=self.kwargs.get('pk', None)).id and \
-                            q["id"] not in self.vyplnene:
-                        mozne = q["id"]
-                        # request.session["vyplnene"] = q["id"]
-                        #prozatim
-                    # try:
-                    #     mozne[i].is_digit()
-                    # except:
-                    #     return redirect('testy')
-            self.vyplnene.append(self.kwargs.get('pk', None))
             self.odpovedi.append({"id": self.kwargs.get('pk', None), "odpoved": answer})
-            # print(self.odpovedi)
-            print("otazka na indexu ", i, " je", self.odpovedi)
-            print("Použité otázky: ", self.vyplnene)
-            print(self.kwargs.get('pk', None), " || ", self.vyplnene)
-            #pocamcad
-            print("Stale mozne otazky: ", mozne)
-            # print(self.odpovedi)
-            # print(uzivatel, " ", kokosak)
-            return redirect('question', test=test_id.id, user=User.objects.get(email=self.kwargs.get('user', None)), pk=mozne)
-        else:
-            form = Ans()
-            return HttpResponse("NEvim co je to")
+            # print(mozne , " vyplnene: ", self.vyplnene)
+            # if mozne not in self.vyplnene:
+            # print(mozne[0][i]["id"] in self.vyplnene)
+            if mozne[0][i]["id"] in self.vyplnene:
+                self.kontrola = False
+            elif mozne[0][i]["test_id_id"] == test_id.id:
+                self.vyplnene.append(self.kwargs.get('pk', None))
+                print("Použité otázky: ", self.vyplnene)
+                print(self.odpovedi)
+                # print(self.odpovedi)
+                # print("otazka na indexu ", i, " je", self.odpovedi)
+
+                # print(self.kwargs.get('pk', None), " || ", self.vyplnene)
+                #pocamcad
+                # print("Stale mozne otazky: ", mozne[0][i]["id"])
+
+                # print(uzivatel, " ", kokosak)
+            if self.kontrola:
+                return redirect('question', test=test_id.id, user=User.objects.get(email=self.kwargs.get('user', None)), pk=mozne[0][i]["id"])
+            else:
+                return redirect('vyhodnoceni', test=test_id.id, user=self.kwargs.get('user', None), result=test_id.title)
+            #potrebuju poslat odpovedi na kontrolu)
+        return redirect('question', test=test_id.id, user=User.objects.get(email=self.kwargs.get('user', None)), pk=self.kwargs.get('pk',None))
             # return redirect('question', test=test_id.id, user=User.objects.get(email=self.kwargs.get('user', None)),
             #                 pk=self.model.objects.all().get(id=self.kwargs.get('pk', None)))
+    # for j in mozne:
+    #     for q in j:
+    #         if q["id"] not in self.vyplnene and mozne not in self.vyplnene:
+    #
+    #             if q["test_id_id"] == test_id.id and q["id"] != self.model.objects.get(id=self.kwargs.get('pk', None)).id and \
+    #                     q["id"] not in self.vyplnene:
+    #                 if q["id"] > mozne[0][i]["id"]:
+    #                     mozne = q["id"]
+    #             print("to je q: ", q["id"], " vyplnene: ", self.vyplnene, " mozne: ", mozne)
+    #         else:
+    #             self.kontrola = False
+    #             break
+    # request.session["vyplnene"] = q["id"]
+    # prozatim
 
-
+class Results(View):
+    def get(self, request, **kwargs):
+        #prozatimne
+        context = {
+            "result": "Funguje%20to%3F",
+            "test": self.kwargs.get('test', None),
+            "user": self.kwargs.get('user', None),
+        }
+        return render(request, 'results.html', context=context)
 
 
