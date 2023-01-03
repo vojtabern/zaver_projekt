@@ -183,38 +183,61 @@ class Question(DetailView):
         return context
 
     def post(self, request, *args, **kwargs):
-        mozne = []
+        dalsi = []
         form = self.form_class(request.POST)
         test_id = Test.objects.all().get(id=self.kwargs.get('test', None))
-        i = len(self.odpovedi)
-        print("Proc je I:", i)
+        user = User.objects.get(email=self.kwargs.get('user', None))
+        take = Take.objects.get(test_id=test_id, user_id=user.id)
+        question = self.model.objects.filter(test_id=test_id).values()
+        i = request.session.get('i', len(question))
+        if request.session["i"] > 0:
+            request.session["i"] = i - 1
+        else:
+            print("i je: ", i)
+        print("user: ", user)
+        print("take: ", take)
+        print( " index: ", i)
+        print("question: ", question[i]["id"])
+        # print(TakeAnswers.objects.filter(take_id=take.id, question_id=, answer_id=))
         if form.is_valid():
-            mozne.append(self.model.objects.filter(test_id=test_id).values())
             answer = form.cleaned_data['answer']
-            self.odpovedi.append({"id": self.kwargs.get('pk', None), "odpoved": answer})
-            # print(mozne , " vyplnene: ", self.vyplnene)
-            # if mozne not in self.vyplnene:
-            # print(mozne[0][i]["id"] in self.vyplnene)
-            if mozne[0][i]["id"] in self.vyplnene:
-                self.kontrola = False
-            elif mozne[0][i]["test_id_id"] == test_id.id:
-                self.vyplnene.append(self.kwargs.get('pk', None))
-                print("Použité otázky: ", self.vyplnene)
-                print(self.odpovedi)
-                # print(self.odpovedi)
-                # print("otazka na indexu ", i, " je", self.odpovedi)
+            print("answer: ", answer)
+            return redirect('question', test=test_id.id, user=User.objects.get(email=self.kwargs.get('user', None)),
+                            pk=1)
 
-                # print(self.kwargs.get('pk', None), " || ", self.vyplnene)
-                #pocamcad
-                # print("Stale mozne otazky: ", mozne[0][i]["id"])
 
-                # print(uzivatel, " ", kokosak)
-            if self.kontrola:
-                return redirect('question', test=test_id.id, user=User.objects.get(email=self.kwargs.get('user', None)), pk=mozne[0][i]["id"])
-            else:
-                return redirect('vyhodnoceni', test=test_id.id, user=self.kwargs.get('user', None), result=test_id.title)
-            #potrebuju poslat odpovedi na kontrolu)
-        return redirect('question', test=test_id.id, user=User.objects.get(email=self.kwargs.get('user', None)), pk=self.kwargs.get('pk',None))
+        # print(Take.objects.filter(test_id=test_id, user_id=user.id))
+
+        # TakeAnswers.objects.filter(test_id=test_id, question_id=)
+        # print("Proc je I:", i)
+        # if form.is_valid():
+        #     dalsi.append(self.model.objects.filter(test_id=test_id.id).values())
+        #     answer = form.cleaned_data['answer']
+        #     self.odpovedi.append({"id": self.kwargs.get('pk', None), "odpoved": answer})
+        #     # print(mozne , " vyplnene: ", self.vyplnene)
+        #     # if mozne not in self.vyplnene:
+        #     # print(mozne[0][i]["id"] in self.vyplnene)
+        #     print(dalsi[0][i]["test_id_id"] == test_id.id)
+        #     if dalsi[0][i]["test_id_id"] == test_id.id and dalsi[0][i]["id"] not in self.vyplnene:
+        #         self.vyplnene.append(self.kwargs.get('pk', None))
+        #         print("Použité otázky: ", self.vyplnene)
+        #         print(self.odpovedi)
+        #         # print(self.odpovedi)
+        #         # print("otazka na indexu ", i, " je", self.odpovedi)
+        #
+        #         # print(self.kwargs.get('pk', None), " || ", self.vyplnene)
+        #         #pocamcad
+        #         print("Vypnene otazky: ", self.vyplnene)
+        #         print("Dalsi otazka: ", dalsi[0][i])
+        #     elif dalsi[0][i]["id"] in self.vyplnene:
+        #         self.kontrola = False
+        #         # print(uzivatel, " ", kokosak)
+        #     if self.kontrola:
+
+    #     else:
+    #         return redirect('vyhodnoceni', test=test_id.id, user=self.kwargs.get('user', None), result=test_id.title)
+    #     #potrebuju poslat odpovedi na kontrolu)
+    # return redirect('question', test=test_id.id, user=User.objects.get(email=self.kwargs.get('user', None)), pk=self.kwargs.get('pk',None))
             # return redirect('question', test=test_id.id, user=User.objects.get(email=self.kwargs.get('user', None)),
             #                 pk=self.model.objects.all().get(id=self.kwargs.get('pk', None)))
     # for j in mozne:
