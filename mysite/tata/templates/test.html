@@ -30,7 +30,7 @@
                     </td>
                 </tr>
             </table>
-            <a href="#" class="btn btn-primary text-white">Spustit</a>
+            <a href="{% url 'question' test=test.id user=user pk=quest.id %}" class="btn btn-primary text-white">Spustit</a>
         </div>
     </div>
 </div>

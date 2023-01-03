@@ -119,8 +119,6 @@ class TestListView(ListView):
         if form.is_valid():
             user = form.cleaned_data['user']
             if user not in self.control:
-                request.session["user"] = user
-                request.session.set_expiry(60)
                 u = User(email=user)
                 u.save()
                 test = Take(user_id=User.objects.get(email=user), test_id=Test.objects.get(pk=self.num))
@@ -143,9 +141,10 @@ class TestDetail(DetailView):
         context = super(TestDetail, self).get_context_data(**kwargs)
         #Create any data and add it to the context
         context['num'] = Questions.objects.all().filter(test_id=self.kwargs["pk"]).count()
-        # print(Take.objects.get(user_id="num"))
-        context['user'] = Take.objects.filter(test_id = self.kwargs["pk"])
-        # print(Take.objects.filter(test_id=self.kwargs["pk"]))
+        context['quest'] = Questions.objects.filter(test_id=self.kwargs["pk"]).values()[:1]
+        tmp = context['quest'][0]
+        context['quest'] = tmp
+        context['user'] = User.objects.get(email=self.kwargs.get('user', None))
         return context
 
 
@@ -159,41 +158,40 @@ class Question(DetailView):
     vyplnene = []
     kontrola = True
 
-    def get_context_data(self,*args, **kwargs):
-        mozne = []
+    def get_context_data(self, *args, **kwargs):
+        question = self.model.objects.filter(test_id=self.kwargs.get('test', None)).values()
         context = super(Question, self).get_context_data(*args, **kwargs)
         context['form'] = self.form_class(initial=self.initial)
         context['test'] = Test.objects.all().get(id=self.kwargs.get('test', None))
         context["user"] = User.objects.all().get(email=self.kwargs.get('user', None))
-        #jestli se TEst.id = question.test_id tak chci zobrazit otázku.
-        mozne.append(self.model.objects.filter(test_id=context["test"].id).values())
-        print("user id: ", context["user"].id)
-        # for j in mozne:
-        #     for q in j:
-        #         if q["test_id_id"] == context['test'].id and q["id"] != context["questions"].id:
-        #             context["mozne"] = q["id"]
-        # print(mozne)
-        if context['test'].id == context["questions"].test_id_id:
-            # print(context["questions"].id)
-            context["question"] = context["questions"]
-            # print(context["question"])
+
+        i = self.request.session.get('i', 0)
+        print("V get je I: ", i)
+        if i < len(question):
+            context['question'] = self.model.objects.get(id=question[i]["id"])
+            context['button'] = "Další otázka"
+            print("Tohle je novy question: ", context["question"])
             return context
         else:
-            context["question"] = "Daná otázka pro daný test neexituje"
-        return context
+            context['button'] = "Ukaž výsledky"
+            return context
 
     def post(self, request, *args, **kwargs):
-        dalsi = []
         form = self.form_class(request.POST)
         test_id = Test.objects.all().get(id=self.kwargs.get('test', None))
         user = User.objects.get(email=self.kwargs.get('user', None))
         take = Take.objects.get(test_id=test_id, user_id=user.id)
         question = self.model.objects.filter(test_id=test_id).values()
-        i = request.session.get('i', len(question))
-        if request.session["i"] > 0:
-            request.session["i"] = i - 1
+        i = request.session.get('i', 0)
+        if i < len(question):
+            request.session["i"] = i + 1
         else:
             print("i je: ", i)
+            request.session["i"] = 0
+            #mazani uzivatele
+            User.objects.get(email=user).delete()
+
+            return redirect('vyhodnoceni', test=test_id.id, user=self.kwargs.get('user', None), result=test_id.title)
         print("user: ", user)
         print("take: ", take)
         print( " index: ", i)
@@ -202,66 +200,21 @@ class Question(DetailView):
         if form.is_valid():
             answer = form.cleaned_data['answer']
             print("answer: ", answer)
+            self.odpovedi.append({"id_qu":question[i]["id"], "question": question[i]["question"], "value": answer})
+            print(self.odpovedi)
             return redirect('question', test=test_id.id, user=User.objects.get(email=self.kwargs.get('user', None)),
-                            pk=1)
+                            pk=question[i]["id"])
 
-
-        # print(Take.objects.filter(test_id=test_id, user_id=user.id))
-
-        # TakeAnswers.objects.filter(test_id=test_id, question_id=)
-        # print("Proc je I:", i)
-        # if form.is_valid():
-        #     dalsi.append(self.model.objects.filter(test_id=test_id.id).values())
-        #     answer = form.cleaned_data['answer']
-        #     self.odpovedi.append({"id": self.kwargs.get('pk', None), "odpoved": answer})
-        #     # print(mozne , " vyplnene: ", self.vyplnene)
-        #     # if mozne not in self.vyplnene:
-        #     # print(mozne[0][i]["id"] in self.vyplnene)
-        #     print(dalsi[0][i]["test_id_id"] == test_id.id)
-        #     if dalsi[0][i]["test_id_id"] == test_id.id and dalsi[0][i]["id"] not in self.vyplnene:
-        #         self.vyplnene.append(self.kwargs.get('pk', None))
-        #         print("Použité otázky: ", self.vyplnene)
-        #         print(self.odpovedi)
-        #         # print(self.odpovedi)
-        #         # print("otazka na indexu ", i, " je", self.odpovedi)
-        #
-        #         # print(self.kwargs.get('pk', None), " || ", self.vyplnene)
-        #         #pocamcad
-        #         print("Vypnene otazky: ", self.vyplnene)
-        #         print("Dalsi otazka: ", dalsi[0][i])
-        #     elif dalsi[0][i]["id"] in self.vyplnene:
-        #         self.kontrola = False
-        #         # print(uzivatel, " ", kokosak)
-        #     if self.kontrola:
-
-    #     else:
-    #         return redirect('vyhodnoceni', test=test_id.id, user=self.kwargs.get('user', None), result=test_id.title)
-    #     #potrebuju poslat odpovedi na kontrolu)
-    # return redirect('question', test=test_id.id, user=User.objects.get(email=self.kwargs.get('user', None)), pk=self.kwargs.get('pk',None))
-            # return redirect('question', test=test_id.id, user=User.objects.get(email=self.kwargs.get('user', None)),
-            #                 pk=self.model.objects.all().get(id=self.kwargs.get('pk', None)))
-    # for j in mozne:
-    #     for q in j:
-    #         if q["id"] not in self.vyplnene and mozne not in self.vyplnene:
-    #
-    #             if q["test_id_id"] == test_id.id and q["id"] != self.model.objects.get(id=self.kwargs.get('pk', None)).id and \
-    #                     q["id"] not in self.vyplnene:
-    #                 if q["id"] > mozne[0][i]["id"]:
-    #                     mozne = q["id"]
-    #             print("to je q: ", q["id"], " vyplnene: ", self.vyplnene, " mozne: ", mozne)
-    #         else:
-    #             self.kontrola = False
-    #             break
-    # request.session["vyplnene"] = q["id"]
-    # prozatim
 
 class Results(View):
+    answers = Question.odpovedi
+    del Question.odpovedi[0:len(Question.odpovedi)]
     def get(self, request, **kwargs):
         #prozatimne
         context = {
-            "result": "Funguje%20to%3F",
             "test": self.kwargs.get('test', None),
             "user": self.kwargs.get('user', None),
+            "answers": self.answers,
         }
         return render(request, 'results.html', context=context)
 

@@ -9,9 +9,14 @@
 </p>
 <form method="post">
   {%csrf_token%}
-  <p>Otazka: {{question}}</p>
-  {{form.answer}}
-  <input value="Další otázka" type="submit"/>
+  {%if button|slugify == "dalsi-otazka"%}
+    <p>Otazka: {{question}}</p>
+    {{form.answer}}
+    <input value="{{button}}" type="submit"/>
+  {%else%}
+    <input value="{{button}}" type="submit"/>
+  <i>Prosím berte v potaz, že už se poté nejde vrátit</i>
+  {%endif%}
 </form>
 
 {%endblock%}
