@@ -12,12 +12,16 @@ import requests
 import os
 from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import Mail
-from django.views.generic import ListView, DetailView
+from django.views.generic import ListView, DetailView, FormView
 from django.utils import timezone
 from django.shortcuts import get_object_or_404
 from django.contrib import messages
 from tata.tests import Ans
 from django.forms.models import model_to_dict
+from django.forms import formset_factory
+from django.core.exceptions import ValidationError
+from django.forms import BaseFormSet
+
 
 class Index(View):
     def get(self, request):
@@ -148,7 +152,7 @@ class TestDetail(DetailView):
         return context
 
 
-class Question(DetailView):
+class Question(ListView):
     model = Questions
     context_object_name = 'questions'
     template_name = 'questions.html'
@@ -157,53 +161,94 @@ class Question(DetailView):
     odpovedi = []
     vyplnene = []
     kontrola = True
+    answers = {}
+    quest = {}
 
     def get_context_data(self, *args, **kwargs):
+        nova = []
         question = self.model.objects.filter(test_id=self.kwargs.get('test', None)).values()
         context = super(Question, self).get_context_data(*args, **kwargs)
         context['form'] = self.form_class(initial=self.initial)
         context['test'] = Test.objects.all().get(id=self.kwargs.get('test', None))
         context["user"] = User.objects.all().get(email=self.kwargs.get('user', None))
 
-        i = self.request.session.get('i', 0)
-        print("V get je I: ", i)
-        if i < len(question):
-            context['question'] = self.model.objects.get(id=question[i]["id"])
-            context['button'] = "Další otázka"
-            print("Tohle je novy question: ", context["question"])
-            return context
-        else:
-            context['button'] = "Ukaž výsledky"
-            return context
+        context["questions"] = self.model.objects.filter(test_id=context['test'])
+        AnsSet = formset_factory(Ans , extra = len(context["questions"]))
+        formset = AnsSet()
+
+        context['formset']=formset
+        for idx, q in enumerate(question):
+            self.quest[idx] = {"id": q["id"], "question": q["question"], "test": q["test_id_id"], "typ": q["typ_id"]}
+        print("jsem v get:", self.quest)
+
+        for i in self.quest:
+            nova.append(self.quest[i])
+        context['quest'] = nova
+        return context
+
+        # i = self.request.session.get('i', 0)
+        # print("V get je I: ", i)
+        # if i < len(question):
+        #     context['question'] = self.model.objects.get(id=question[i]["id"])
+        #     context['button'] = "Další otázka"
+        #     print("Tohle je novy question: ", context["question"])
+        #     return context
+        # else:
+        #     context['button'] = "Ukaž výsledky"
+        #     return context
 
     def post(self, request, *args, **kwargs):
-        form = self.form_class(request.POST)
+
         test_id = Test.objects.all().get(id=self.kwargs.get('test', None))
         user = User.objects.get(email=self.kwargs.get('user', None))
         take = Take.objects.get(test_id=test_id, user_id=user.id)
         question = self.model.objects.filter(test_id=test_id).values()
-        i = request.session.get('i', 0)
-        if i < len(question):
-            request.session["i"] = i + 1
-        else:
-            print("i je: ", i)
-            request.session["i"] = 0
-            #mazani uzivatele
-            User.objects.get(email=user).delete()
 
-            return redirect('vyhodnoceni', test=test_id.id, user=self.kwargs.get('user', None), result=test_id.title)
-        print("user: ", user)
-        print("take: ", take)
-        print( " index: ", i)
-        print("question: ", question[i]["id"])
-        # print(TakeAnswers.objects.filter(take_id=take.id, question_id=, answer_id=))
-        if form.is_valid():
-            answer = form.cleaned_data['answer']
-            print("answer: ", answer)
-            self.odpovedi.append({"id_qu":question[i]["id"], "question": question[i]["question"], "value": answer})
-            print(self.odpovedi)
-            return redirect('question', test=test_id.id, user=User.objects.get(email=self.kwargs.get('user', None)),
-                            pk=question[i]["id"])
+        for idx, q in enumerate(question):
+            self.quest[idx] = {"id": q["id"], "question": q["question"], "test": q["test_id_id"], "typ": q["typ_id"]}
+
+        AnsSet = formset_factory(Ans, extra = len(question))
+
+        formset = AnsSet(request.POST or None)
+        if request.method == 'POST':
+            if formset.is_valid():
+                for idx, form in enumerate(formset):
+                    answer = form.cleaned_data.get('answer')
+                    print(answer)
+                    print(form['answer'].label_tag())
+                    # print(form.cleaned_data)
+                    # print(self.quest[idx])
+                    self.answers[idx] = {"q":  self.quest[idx]["id"], "t": self.quest[idx]["test"],
+                                         "answer": answer}
+            else:
+                print(formset.non_form_errors())
+            print("Ans ", self.answers)
+            return render(request, "results.html", self.answers)
+        else:
+            print(formset.errors)
+
+
+        # i = request.session.get('i', 0)
+        # if i < len(question):
+        #     request.session["i"] = i + 1
+        # else:
+        #     print("i je: ", i)
+        #     request.session["i"] = 0
+        #     #mazani uzivatele
+        #     User.objects.get(email=user).delete()
+        #     return redirect('vyhodnoceni', test=test_id.id, user=self.kwargs.get('user', None), result=test_id.title)
+        # # print(TakeAnswers.objects.filter(take_id=take.id, question_id=, answer_id=))
+        # if form.is_valid():
+        #     answer = form.cleaned_data['answer']
+        #     #tohle je typ, musim ho implementovat, ale mozna ne tady
+        #     # typ = Typ.objects.filter(id=question[i]["typ_id"]).values()
+        #     # typ = typ[i]
+        #     # print(typ["typ"])
+        #     print("answer: ", answer)
+        #     self.odpovedi.append({"id_qu":question[i]["id"], "question": question[i]["question"], "value": answer})
+        #     print(self.odpovedi)
+        #     return redirect('question', test=test_id.id, user=User.objects.get(email=self.kwargs.get('user', None)),
+        #                     pk=question[i]["id"])
 
 
 class Results(View):

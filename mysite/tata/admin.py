@@ -12,6 +12,7 @@ admin.site.register(Test)
 admin.site.register(Answers)
 admin.site.register(Questions)
 admin.site.register(TakeAnswers)
+admin.site.register(Typ)
 
 
 # Register your models here.

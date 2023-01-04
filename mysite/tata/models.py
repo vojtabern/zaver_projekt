@@ -104,10 +104,19 @@ class Take(models.Model):
     def __int__(self):
         return self.test_id
 
+class Typ(models.Model):
+    typ = models.CharField(max_length=45, default="Typ otázky")
+
+    class Meta:
+        ordering = ["typ"]
+
+    def __str__(self):
+        return self.typ
 
 class Questions(models.Model):
     question = models.CharField(max_length=45, default="Zde napište otázku")
     test_id = models.ForeignKey(Test, on_delete=models.CASCADE)
+    typ = models.ForeignKey(Typ, on_delete=models.CASCADE, default=1)
 
     class Meta:
         ordering = ["question"]
