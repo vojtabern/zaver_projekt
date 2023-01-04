@@ -16,8 +16,10 @@ from django.views.generic import ListView, DetailView
 from django.utils import timezone
 from django.shortcuts import get_object_or_404
 from django.contrib import messages
-from tata.tests import Ans
+from tata.tests import Ans, Formset
 from django.forms.models import model_to_dict
+from django.forms.formsets import formset_factory
+from django.core.exceptions import ValidationError
 
 class Index(View):
     def get(self, request):
@@ -147,23 +149,41 @@ class TestDetail(DetailView):
         context['user'] = User.objects.get(email=self.kwargs.get('user', None))
         return context
 
+# class Question(ListView):
+#     model = Questions
+#     context_object_name = 'questions'
+#     template_name = 'questions.html'
+#     form_class = Ans
+#     initial = {'key': 'value'}
+#     odpovedi = []
+#     kontrola = True
 
-class Question(DetailView):
+class Question(ListView):
     model = Questions
     context_object_name = 'questions'
     template_name = 'questions.html'
-    form_class = Ans
+    form_class = formset_factory(Ans, formset=Formset)
     initial = {'key': 'value'}
     odpovedi = []
     vyplnene = []
     kontrola = True
 
     def get_context_data(self, *args, **kwargs):
-        question = self.model.objects.filter(test_id=self.kwargs.get('test', None)).values()
+
+
         context = super(Question, self).get_context_data(*args, **kwargs)
+        context["questions"] = self.model.objects.filter(test_id=self.kwargs.get('test', None))
+        context['test'] = Test.objects.all().get(id=self.kwargs.get('test', None))
+        context['form'] = self.form_class()
+
+        return context
+
+
+        question = self.model.objects.filter(test_id=self.kwargs.get('test', None)).values()
         context['form'] = self.form_class(initial=self.initial)
         context['test'] = Test.objects.all().get(id=self.kwargs.get('test', None))
         context["user"] = User.objects.all().get(email=self.kwargs.get('user', None))
+
 
         i = self.request.session.get('i', 0)
         print("V get je I: ", i)
@@ -178,6 +198,16 @@ class Question(DetailView):
 
     def post(self, request, *args, **kwargs):
         form = self.form_class(request.POST)
+        if request.method == 'POST':
+            try:
+                delblogformset = self.form_class(request.POST)
+            except ValidationError:
+                delblogformset = None
+            if delblogformset and delblogformset.is_valid():
+
+                return HttpResponseRedirect('/home')
+        # context = super(Question, self.get_context_data(*args, **kwargs)).get_context_data(*args, **kwargs)
+        # print(context["questions"])
         test_id = Test.objects.all().get(id=self.kwargs.get('test', None))
         user = User.objects.get(email=self.kwargs.get('user', None))
         take = Take.objects.get(test_id=test_id, user_id=user.id)

@@ -3,10 +3,20 @@
 {%block content%}
 <p>Test: {{test.title}}</p>
 
-<p> <i>
+<i>
   {{questions}}</i>
+<form method="post">
+  {%csrf_token%}
+  {% for q in questions %}
+    <p>proste q: {{q}}</p>
+    <p>q id: {{q.id}}</p>
+    <p>q test id: {{q.test_id_id}}</p>
+    {{form}}
+    <hr>
+  {% endfor %}
+      <input value="dalsi" type="submit"/>
+    </form>
 
-</p>
 <form method="post">
   {%csrf_token%}
   {%if button|slugify == "dalsi-otazka"%}
