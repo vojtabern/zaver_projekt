@@ -4,31 +4,45 @@
 <p>Test: {{test.title}}</p>
 
 <p>
+<!--<form action="" method="post" enctype="multipart/form-data">-->
+
+<!--  {% for forms in formset %}-->
+<!--  {{ forms.management_form }}-->
+<!--  {% csrf_token %}-->
+<!--  {{ forms.non_form_errors.as_ul }}-->
+<!--  <h1>{{forms.prefix}}</h1>-->
+<!--  {{forms.as_p}}-->
+<!--  {% endfor %}-->
+<!--   <input type="submit" value="Submit">-->
+<!--  </form>-->
+
+
+  <form method="POST" enctype="multipart/form-data">
+  {{ formset.management_data }}
+    {% csrf_token %}
+    {%for q in quest%}
+      {%with forloop.counter0 as id%}
+    <p>
+      <label for="id_form-{{id}}-answer">{{q.question}}</label>
+      {%for form in formset%}
+        {%if forloop.counter0 == id%}
+          {{form.answer}}
+        {%else%}
+          {{ form.as_hidden }}
+        {%endif%}
+      {%endfor%}
+    </p>
+    {%endwith%}
+    {%endfor%}
+    <input type="submit" value="Submit">
+  </form>
 
 <!--  <form method="POST" enctype="multipart/form-data">-->
 <!--      {{ formset.management_data }}-->
 <!--    {% csrf_token %}-->
-<!--    {%for q in quest%}-->
-<!--      {%with forloop.counter0 as id%}-->
-<!--    <p>-->
-<!--      <label for="id_form-{{id}}-answer">{{q.question}}</label>-->
-<!--      {%for form in formset%}-->
-<!--        {%if forloop.counter0 == id%}-->
-<!--          {{form.answer}}-->
-<!--        {%endif%}-->
-<!--      {%endfor%}-->
-<!--    </p>-->
-<!--    {%endwith%}-->
-<!--    {%endfor%}-->
+<!--      {{formset.as_p}}-->
 <!--    <input type="submit" value="Submit">-->
 <!--  </form>-->
-
-  <form method="POST" enctype="multipart/form-data">
-      {{ formset.management_data }}
-    {% csrf_token %}
-      {{formset.as_p}}
-    <input type="submit" value="Submit">
-  </form>
 
 {%endblock%}
 

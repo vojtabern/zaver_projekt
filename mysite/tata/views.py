@@ -208,47 +208,43 @@ class Question(ListView):
             self.quest[idx] = {"id": q["id"], "question": q["question"], "test": q["test_id_id"], "typ": q["typ_id"]}
 
         AnsSet = formset_factory(Ans, extra = len(question))
+        # formset = AnsSet(request.POST or None)
+        my_post_dict = request.POST.copy()
+        # print(my_post_dict)
+        my_post_dict['form-TOTAL_FORMS'] = len(question)
+        my_post_dict['form-INITIAL_FORMS'] = len(question)
+        my_post_dict['form-MAX_NUM_FORMS'] = len(question)
+        print("Po zmene:\n", my_post_dict)
+        myformset = AnsSet(my_post_dict)
 
-        formset = AnsSet(request.POST or None)
-        if request.method == 'POST':
-            if formset.is_valid():
-                for idx, form in enumerate(formset):
-                    answer = form.cleaned_data.get('answer')
-                    print(answer)
-                    print(form['answer'].label_tag())
-                    # print(form.cleaned_data)
-                    # print(self.quest[idx])
-                    self.answers[idx] = {"q":  self.quest[idx]["id"], "t": self.quest[idx]["test"],
-                                         "answer": answer}
-            else:
-                print(formset.non_form_errors())
+        if myformset.is_valid():
+            for idx, form in enumerate(myformset):
+                answer = form.cleaned_data.get('answer')
+                # print(answer)
+                self.answers[idx] = {"q": self.quest[idx]["id"], "t": self.quest[idx]["test"],
+                                     "answer": answer, "typ": self.quest[idx]["typ"]}
             print("Ans ", self.answers)
             return render(request, "results.html", self.answers)
         else:
-            print(formset.errors)
+            return HttpResponseRedirect(request.path_info)
 
-
-        # i = request.session.get('i', 0)
-        # if i < len(question):
-        #     request.session["i"] = i + 1
+        # if request.method == 'POST':
+        #     if formset.is_valid():
+        #         for idx, form in enumerate(formset):
+        #             answer = form.cleaned_data.get('answer')
+        #             print(answer)
+        #             print(form['answer'].label_tag())
+        #             # print(form.cleaned_data)
+        #             # print(self.quest[idx])
+        #             self.answers[idx] = {"q":  self.quest[idx]["id"], "t": self.quest[idx]["test"],
+        #                                  "answer": answer}
+        #     else:
+        #         print(formset.non_form_errors())
+        #     print("Ans ", self.answers)
+        #     return render(request, "results.html", self.answers)
         # else:
-        #     print("i je: ", i)
-        #     request.session["i"] = 0
-        #     #mazani uzivatele
-        #     User.objects.get(email=user).delete()
-        #     return redirect('vyhodnoceni', test=test_id.id, user=self.kwargs.get('user', None), result=test_id.title)
-        # # print(TakeAnswers.objects.filter(take_id=take.id, question_id=, answer_id=))
-        # if form.is_valid():
-        #     answer = form.cleaned_data['answer']
-        #     #tohle je typ, musim ho implementovat, ale mozna ne tady
-        #     # typ = Typ.objects.filter(id=question[i]["typ_id"]).values()
-        #     # typ = typ[i]
-        #     # print(typ["typ"])
-        #     print("answer: ", answer)
-        #     self.odpovedi.append({"id_qu":question[i]["id"], "question": question[i]["question"], "value": answer})
-        #     print(self.odpovedi)
-        #     return redirect('question', test=test_id.id, user=User.objects.get(email=self.kwargs.get('user', None)),
-        #                     pk=question[i]["id"])
+        #     print(formset.errors)
+
 
 
 class Results(View):
