@@ -3,6 +3,28 @@
 {%block content%}
 
 <h2>Vysledky</h2>
-{{answers}}
+<p> User: {{user}}</p>
+<!--{{questions}}-->
+{%for q in questions%}
+    {%for i in q%}
+        {%for answer in answers%}
+            {%if answer.question_id_id == i.id %}
+                <div>
+                <p>{{i}} Odpoved: {{answer.value}}</p>
+                <p>ID: {{answer.id}}</p>
+                <p>Hodnota: {{answer.value}}</p>
+                </div>
+                <hr/>
+
+            {%endif%}
+        {%endfor%}
+    {%endfor%}
+{%endfor%}
+<hr/>
+
+<hr/>
+{%for t in take%}
+    <p>Take ID: {{t.answer_id_id}}</p>
+{%endfor%}
 
 {%endblock%}

@@ -179,23 +179,12 @@ class Question(ListView):
         context['formset']=formset
         for idx, q in enumerate(question):
             self.quest[idx] = {"id": q["id"], "question": q["question"], "test": q["test_id_id"], "typ": q["typ_id"]}
-        print("jsem v get:", self.quest)
+        # print("jsem v get:", self.quest)
 
         for i in self.quest:
             nova.append(self.quest[i])
         context['quest'] = nova
         return context
-
-        # i = self.request.session.get('i', 0)
-        # print("V get je I: ", i)
-        # if i < len(question):
-        #     context['question'] = self.model.objects.get(id=question[i]["id"])
-        #     context['button'] = "Další otázka"
-        #     print("Tohle je novy question: ", context["question"])
-        #     return context
-        # else:
-        #     context['button'] = "Ukaž výsledky"
-        #     return context
 
     def post(self, request, *args, **kwargs):
 
@@ -214,49 +203,51 @@ class Question(ListView):
         my_post_dict['form-TOTAL_FORMS'] = len(question)
         my_post_dict['form-INITIAL_FORMS'] = len(question)
         my_post_dict['form-MAX_NUM_FORMS'] = len(question)
-        print("Po zmene:\n", my_post_dict)
+        # print("Po zmene:\n", my_post_dict)
         myformset = AnsSet(my_post_dict)
 
-        if myformset.is_valid():
+        if myformset.is_valid() and request.method == 'POST':
             for idx, form in enumerate(myformset):
                 answer = form.cleaned_data.get('answer')
-                # print(answer)
                 self.answers[idx] = {"q": self.quest[idx]["id"], "t": self.quest[idx]["test"],
                                      "answer": answer, "typ": self.quest[idx]["typ"]}
-            print("Ans ", self.answers)
-            return render(request, "results.html", self.answers)
+                ans = Answers(question_id_id=self.quest[idx]["id"] , test_id_id=self.quest[idx]["test"], value=answer)
+                ans.save()
+
+                kokos = Answers.objects.filter(question_id_id=self.quest[idx]["id"],
+                                               test_id_id=self.quest[idx]["test"]).values()
+
+                ans_take = TakeAnswers(take_id_id=take.id, questions_id_id=self.quest[idx]["id"], answer_id_id=kokos[0]["id"])
+                ans_take.save()
+            # print("Ans ", self.answers)
+            return redirect('vyhodnoceni', test=test_id.id, user=user, result=test_id)
         else:
             return HttpResponseRedirect(request.path_info)
 
-        # if request.method == 'POST':
-        #     if formset.is_valid():
-        #         for idx, form in enumerate(formset):
-        #             answer = form.cleaned_data.get('answer')
-        #             print(answer)
-        #             print(form['answer'].label_tag())
-        #             # print(form.cleaned_data)
-        #             # print(self.quest[idx])
-        #             self.answers[idx] = {"q":  self.quest[idx]["id"], "t": self.quest[idx]["test"],
-        #                                  "answer": answer}
-        #     else:
-        #         print(formset.non_form_errors())
-        #     print("Ans ", self.answers)
-        #     return render(request, "results.html", self.answers)
-        # else:
-        #     print(formset.errors)
+class Results(ListView):
+    model = Answers
+    template_name = 'results.html'
+    context_object_name = 'answers'
 
-
-
-class Results(View):
-    answers = Question.odpovedi
-    del Question.odpovedi[0:len(Question.odpovedi)]
-    def get(self, request, **kwargs):
+    def get_context_data(self, *args, **kwargs):
+        questions = []
         #prozatimne
         context = {
             "test": self.kwargs.get('test', None),
             "user": self.kwargs.get('user', None),
-            "answers": self.answers,
+            #musim dodelat take a kotrolovat i skrz nej
+            "take": TakeAnswers.objects.all(),
         }
-        return render(request, 'results.html', context=context)
+        context["answers"] = self.model.objects.filter(test_id=context['test'])
+        # print(context["answers"].values()[0]["question_id_id"])
+        for idx, q in enumerate(Questions.objects.filter(test_id_id=context['test'])):
+            print(context["answers"].values()[idx]["question_id_id"])
+            print(q)
+            questions.append(Questions.objects.filter(id=context["answers"].values()[idx]["question_id_id"]))
+        context["questions"] = questions
+        return context
+
+
+
 
 
