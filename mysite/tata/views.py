@@ -231,20 +231,32 @@ class Results(ListView):
 
     def get_context_data(self, *args, **kwargs):
         questions = []
+        take = []
+        valid = []
         #prozatimne
+
         context = {
             "test": self.kwargs.get('test', None),
-            "user": self.kwargs.get('user', None),
+            "user": User.objects.get(email=self.kwargs.get('user', None)).id,
             #musim dodelat take a kotrolovat i skrz nej
-            "take": TakeAnswers.objects.all(),
+
         }
         context["answers"] = self.model.objects.filter(test_id=context['test'])
+        taken = Take.objects.get(test_id_id=context["test"], user_id_id=context['user'])
         # print(context["answers"].values()[0]["question_id_id"])
         for idx, q in enumerate(Questions.objects.filter(test_id_id=context['test'])):
-            print(context["answers"].values()[idx]["question_id_id"])
-            print(q)
-            questions.append(Questions.objects.filter(id=context["answers"].values()[idx]["question_id_id"]))
-        context["questions"] = questions
+            # print(context["answers"].values()[idx]["id"])
+            # print(q.id)
+            # questions.append(Questions.objects.filter(id=context["answers"].values()[idx]["question_id_id"]))
+            take.append(TakeAnswers.objects.filter(answer_id_id=context["answers"].values()[idx]["id"], take_id_id=taken))
+        print(take)
+
+
+        context["questions"] = Questions.objects.all()
+        context["take"] = taken
+        context["ansTake"] = take
+        # context["valid"] = valid
+        # context["take"] = TakeAnswers.objects.filter(answer_id_id=context["answers"])
         return context
 
 

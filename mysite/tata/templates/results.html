@@ -4,27 +4,18 @@
 
 <h2>Vysledky</h2>
 <p> User: {{user}}</p>
-<!--{{questions}}-->
-{%for q in questions%}
-    {%for i in q%}
-        {%for answer in answers%}
-            {%if answer.question_id_id == i.id %}
-                <div>
-                <p>{{i}} Odpoved: {{answer.value}}</p>
-                <p>ID: {{answer.id}}</p>
-                <p>Hodnota: {{answer.value}}</p>
-                </div>
-                <hr/>
+<p>Take: {{take.id}}</p>
 
-            {%endif%}
-        {%endfor%}
+<!--{{ansTake}}-->{%for answer in answers%}
+{%for t in ansTake%}
+        {%if t.0.answer_id_id == answer.id and t.0.take_id_id == take.id%}
+            <p>Otazka: {%for q in questions%}{%if q.id == t.0.questions_id_id and t.0.answer_id_id == answer.id %}{{q.question}}{%endif%}{%endfor%}</p>
+            <p>Odpoved: {{answer.value}}</p>
+            <p>ID: {{answer.id}}</p>
+            <p>Hodnota: {{answer.value}}</p>
+            <br/>
+        {%endif%}
     {%endfor%}
-{%endfor%}
-<hr/>
-
-<hr/>
-{%for t in take%}
-    <p>Take ID: {{t.answer_id_id}}</p>
 {%endfor%}
 
 {%endblock%}
