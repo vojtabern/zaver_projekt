@@ -230,8 +230,10 @@ class Results(ListView):
     context_object_name = 'answers'
 
     def get_context_data(self, *args, **kwargs):
+
         questions = []
         take = []
+        take.clear()
         valid = []
         #prozatimne
 

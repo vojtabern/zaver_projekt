@@ -114,7 +114,7 @@ class Typ(models.Model):
         return self.typ
 
 class Questions(models.Model):
-    question = models.CharField(max_length=45, default="Zde napište otázku")
+    question = models.CharField(max_length=150, default="Zde napište otázku")
     test_id = models.ForeignKey(Test, on_delete=models.CASCADE)
     typ = models.ForeignKey(Typ, on_delete=models.CASCADE, default=1)
 
