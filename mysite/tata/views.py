@@ -260,7 +260,9 @@ class Results(ListView):
         for idx, q in enumerate(Questions.objects.filter(test_id_id=context['test'])):
             for i in zabiju_se_XD:
                 if q.id == i["questions_id"]:
-                    typ.append({"typ_id": Typ.objects.filter(id=i["typ_id"]).values()[0]["id"], "que_id": q.id, "typ": Typ.objects.filter(id=i["typ_id"]).values()[0]["typ"]})
+                    typ.append({"typ_id": Typ.objects.filter(id=i["typ_id"]).values()[0]["id"], "que_id": q.id,
+                                "typ": Typ.objects.filter(id=i["typ_id"]).values()[0]["typ"],
+                                "takeans": TakeAnswers.objects.filter(questions_id_id=i["questions_id"]).values()[0]["answer_id_id"]})
             # print(context["answers"].values()[idx]["id"])
             # print(q.id)
             # print(q.id)
@@ -271,7 +273,6 @@ class Results(ListView):
         # print(typ)
         # {1: +6}
         typy = Typ.objects.all().values()
-        print(take[0][0].answer_id_id)
         camyduh = {}
         for x in zabiju_se_XD:
             for i in typy:
@@ -280,13 +281,14 @@ class Results(ListView):
             for idx, q in enumerate(Questions.objects.all()):
                 if q.id == i["que_id"]:
                     # print("==", q.id)
-                    if q.id == \
-                        self.model.objects.get(question_id_id=q.id,
-                                                   takeanswers=TakeAnswers.objects.get(answer_id_id=context["answers"].values()[idx]["id"], take_id_id=taken).id).question_id_id:
+                    # print(i["takeans"])
+                    # print(self.model.objects.get(question_id_id=q.id).id)
+                    # print(q.id == self.model.objects.get(takeanswers=TakeAnswers.objects.get(answer_id_id=i["takeans"])).question_id_id)
+                    if q.id == self.model.objects.get(takeanswers=TakeAnswers.objects.get(answer_id_id=i["takeans"])).question_id_id:
                             if i["typ_id"] in camyduh and camyduh[i["typ_id"]] != 0:
                                 # print("co", camyduh[i["typ_id"]])
                                 temp = {i["typ_id"]: camyduh[i["typ_id"]] + self.model.objects.filter(question_id_id=q.id).values()[0]["value"]}
-                                print(temp)
+
                                 camyduh.update(temp)
                             else:
                                 camyduh[i["typ_id"]] = self.model.objects.filter(question_id_id=q.id).values()[0]["value"]
@@ -298,7 +300,32 @@ class Results(ListView):
         context["typ"] = typ
         context["typy"] = typy
         context["spracuj"] = camyduh
-        context["values"] = list (camyduh.values())
+        vyhodnoceni = {"pohoda v čase": 0, "ve světě": 0, "Integrita": 0, "pozitivní připravenost": 0, "schopnost svobody, existence": 0}
+        for key, s in context["spracuj"].items():
+            for t in context["typ"]:
+                # print(t)
+                if key == t["typ_id"]:
+                    if (key==2 or key ==3 or key==1) and key not in vyhodnoceni:
+                        temp = {"pohoda v čase": s + self.model.objects.filter(question_id_id=t["que_id"]).values()[0]["value"]}
+                        vyhodnoceni.update(temp)
+                    if (key == 5 or key == 4 or key == 10) and key not in vyhodnoceni:
+                        temp = {"ve světě": s + self.model.objects.filter(question_id_id=t["que_id"]).values()[0]["value"]}
+                        vyhodnoceni.update(temp)
+                    if (key == 6 or key == 7 or key == 8 or key == 9) and key not in vyhodnoceni:
+                        temp = {"Integrita": s + self.model.objects.filter(question_id_id=t["que_id"]).values()[0]["value"]}
+                        vyhodnoceni.update(temp)
+                    if (key == 14 or key == 11 or key == 12 or key == 13) and key not in vyhodnoceni:
+                        temp = {
+                            "pozitivní připravenost": s + self.model.objects.filter(question_id_id=t["que_id"]).values()[0]["value"]}
+                        vyhodnoceni.update(temp)
+                    if (key == 16 or key == 17) and key not in vyhodnoceni:
+                        temp = {
+                            "schopnost svobody, existence": s + self.model.objects.filter(question_id_id=t["que_id"]).values()[0]["value"]}
+                        vyhodnoceni.update(temp)
+
+        context["typy"] = vyhodnoceni
+
+        context["values"] = list (vyhodnoceni.values())
         return context
 
 

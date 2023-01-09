@@ -3,8 +3,8 @@
 {%block content%}
 
 <h2>Vysledky</h2>
-<p> User: {{user}}</p>
-<p>Take: {{take.id}}</p>
+<!--<p> User: {{user}}</p>-->
+<!--<p>Take: {{take.id}}</p>-->
 
 <div class="container-fluid">
     <div class="row">
@@ -13,36 +13,7 @@
         </div>
     </div>
 </div>
-{{typ.0.typ_id}}
-<!--{{ansTake}}-->
-{%for answer in answers%}
-    {%for t in ansTake%}
-        {%if t.0.answer_id_id == answer.id and t.0.take_id_id == take.id%}
-            <p>Otazka: {%for q in questions%}{%if q.id == t.0.questions_id_id and t.0.answer_id_id == answer.id %}{{q.question}}{%endif%}{%endfor%}</p>
-            <p>Odpoved: {{answer.value}}</p>
-            <p>ID: {{answer.id}}</p>
-            <p>Hodnota: {{answer.value}}</p>
-            {%for kys in typ%}
-                {%for q in questions %}
-                    {%if kys.que_id == q.id and q.id == t.0.questions_id_id and t.0.answer_id_id == answer.id%}
-                         <p>Typ: {{kys.que_id}} </p>
-                    {%endif%}
-                {%endfor%}
-            {%endfor%}
-            <br/>
-        {%endif%}
-    {%endfor%}
-{%endfor%}
 
-{{spracuj}}
-{%for key, s in spracuj.items%}
-    {%for t in typ%}
-        {%if key == t.typ_id%}
-        <p>{{t.typ}} {{s}}</p>
-        {%endif%}
-    {%endfor%}
-{%endfor%}
-{{values}}
 
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -54,8 +25,8 @@
 {%endfor%}
    const data = {
   labels: [
-    {%for t in typy%}
-        '{{t.typ}}',
+    {%for key, t in typy.items%}
+        '{{key}}',
     {%endfor%}
   ],
   datasets: [{
