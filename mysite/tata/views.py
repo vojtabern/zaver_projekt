@@ -260,7 +260,7 @@ class Results(ListView):
         for idx, q in enumerate(Questions.objects.filter(test_id_id=context['test'])):
             for i in zabiju_se_XD:
                 if q.id == i["questions_id"]:
-                    typ.append({"typ_id": Typ.objects.filter(id=i["typ_id"]).values()[0]["id"], "que_id": q.id})
+                    typ.append({"typ_id": Typ.objects.filter(id=i["typ_id"]).values()[0]["id"], "que_id": q.id, "typ": Typ.objects.filter(id=i["typ_id"]).values()[0]["typ"]})
             # print(context["answers"].values()[idx]["id"])
             # print(q.id)
             # print(q.id)
@@ -276,8 +276,6 @@ class Results(ListView):
         for x in zabiju_se_XD:
             for i in typy:
                 camyduh.update({i["id"]: 0})
-                if i["id"] == x["typ_id"] and i["typ"] != 'výplňová':
-                    print(i["id"])
         for i in typ:
             for idx, q in enumerate(Questions.objects.all()):
                 if q.id == i["que_id"]:
@@ -298,7 +296,9 @@ class Results(ListView):
         context["take"] = taken
         context["ansTake"] = take
         context["typ"] = typ
+        context["typy"] = typy
         context["spracuj"] = camyduh
+        context["values"] = list (camyduh.values())
         return context
 
 
