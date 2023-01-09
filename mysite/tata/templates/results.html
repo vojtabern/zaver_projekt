@@ -5,17 +5,83 @@
 <h2>Vysledky</h2>
 <p> User: {{user}}</p>
 <p>Take: {{take.id}}</p>
-
-<!--{{ansTake}}-->{%for answer in answers%}
-{%for t in ansTake%}
+{{typ.0.typ_id}}
+<!--{{ansTake}}-->
+{%for answer in answers%}
+    {%for t in ansTake%}
         {%if t.0.answer_id_id == answer.id and t.0.take_id_id == take.id%}
             <p>Otazka: {%for q in questions%}{%if q.id == t.0.questions_id_id and t.0.answer_id_id == answer.id %}{{q.question}}{%endif%}{%endfor%}</p>
             <p>Odpoved: {{answer.value}}</p>
             <p>ID: {{answer.id}}</p>
             <p>Hodnota: {{answer.value}}</p>
+            {%for kys in typ%}
+                {%for q in questions %}
+                    {%if kys.que_id == q.id and q.id == t.0.questions_id_id and t.0.answer_id_id == answer.id%}
+                         <p>Typ: {{kys.que_id}} </p>
+                    {%endif%}
+                {%endfor%}
+            {%endfor%}
             <br/>
         {%endif%}
     {%endfor%}
 {%endfor%}
+
+{{spracuj}}
+
+<div>
+  <canvas id="myChart"></canvas>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+  const ctx = document.getElementById('myChart');
+
+   const data = {
+  labels: [
+    'Eating',
+    'Drinking',
+    'Sleeping',
+    'Designing',
+    'Coding',
+    'Cycling',
+    'Running'
+  ],
+  datasets: [{
+    label: 'My First Dataset',
+    data: [65, 59, 90, 81, 56, 55, 40],
+    fill: true,
+    backgroundColor: 'rgba(255, 99, 132, 0.2)',
+    borderColor: 'rgb(255, 99, 132)',
+    pointBackgroundColor: 'rgb(255, 99, 132)',
+    pointBorderColor: '#fff',
+    pointHoverBackgroundColor: '#fff',
+    pointHoverBorderColor: 'rgb(255, 99, 132)'
+  }]
+};
+  const config = {
+      type: 'radar',
+      data: data,
+      options: {
+        elements: {
+          line: {
+            borderWidth: 3
+          }
+        }
+      },
+};
+
+  new Chart(ctx, {
+    type: 'radar',
+    data: data,
+      options: {
+        elements: {
+          line: {
+            borderWidth: 3
+          }
+        }
+      },
+  });
+</script>
 
 {%endblock%}

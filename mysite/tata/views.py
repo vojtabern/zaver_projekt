@@ -167,6 +167,8 @@ class Question(ListView):
     def get_context_data(self, *args, **kwargs):
         nova = []
         question = self.model.objects.filter(test_id=self.kwargs.get('test', None)).values()
+        # typ = Typ.objects.all().values()
+        # print(typ)
         context = super(Question, self).get_context_data(*args, **kwargs)
         context['form'] = self.form_class(initial=self.initial)
         context['test'] = Test.objects.all().get(id=self.kwargs.get('test', None))
@@ -177,10 +179,14 @@ class Question(ListView):
         formset = AnsSet()
 
         context['formset']=formset
+        zabiju_se_XD = self.model.typ.through.objects.all().values()
+        # print(zabiju_se_XD, "\n")
         for idx, q in enumerate(question):
-            self.quest[idx] = {"id": q["id"], "question": q["question"], "test": q["test_id_id"], "typ": q["typ_id"]}
+            for i in zabiju_se_XD:
+                if q["id"] == i["questions_id"]:
+                    self.quest[idx] = {"id": q["id"], "question": q["question"], "test": q["test_id_id"], "typ":i["typ_id"]}#, "typ": q["typ_id"]
         # print("jsem v get:", self.quest)
-
+        # print(self.quest)
         for i in self.quest:
             nova.append(self.quest[i])
         context['quest'] = nova
@@ -193,8 +199,11 @@ class Question(ListView):
         take = Take.objects.get(test_id=test_id, user_id=user.id)
         question = self.model.objects.filter(test_id=test_id).values()
 
+        zabiju_se_XD = self.model.typ.through.objects.all().values()
         for idx, q in enumerate(question):
-            self.quest[idx] = {"id": q["id"], "question": q["question"], "test": q["test_id_id"], "typ": q["typ_id"]}
+            for i in zabiju_se_XD:
+                if q["id"] == i["questions_id"]:
+                    self.quest[idx] = {"id": q["id"], "question": q["question"], "test": q["test_id_id"], "typ": i["typ_id"]}#, "typ": q["typ_id"]}
 
         AnsSet = formset_factory(Ans, extra = len(question))
         # formset = AnsSet(request.POST or None)
@@ -208,6 +217,7 @@ class Question(ListView):
 
         if myformset.is_valid() and request.method == 'POST':
             for idx, form in enumerate(myformset):
+
                 answer = form.cleaned_data.get('answer')
                 self.answers[idx] = {"q": self.quest[idx]["id"], "t": self.quest[idx]["test"],
                                      "answer": answer, "typ": self.quest[idx]["typ"]}
@@ -231,8 +241,8 @@ class Results(ListView):
 
     def get_context_data(self, *args, **kwargs):
 
-        questions = []
         take = []
+        typ = []
         take.clear()
         valid = []
         #prozatimne
@@ -246,21 +256,50 @@ class Results(ListView):
         context["answers"] = self.model.objects.filter(test_id=context['test'])
         taken = Take.objects.get(test_id_id=context["test"], user_id_id=context['user'])
         # print(context["answers"].values()[0]["question_id_id"])
+        zabiju_se_XD = Questions.typ.through.objects.all().values()
         for idx, q in enumerate(Questions.objects.filter(test_id_id=context['test'])):
+            for i in zabiju_se_XD:
+                if q.id == i["questions_id"]:
+                    typ.append({"typ_id": Typ.objects.filter(id=i["typ_id"]).values()[0]["id"], "que_id": q.id})
             # print(context["answers"].values()[idx]["id"])
             # print(q.id)
+            # print(q.id)
+
             # questions.append(Questions.objects.filter(id=context["answers"].values()[idx]["question_id_id"]))
             take.append(TakeAnswers.objects.filter(answer_id_id=context["answers"].values()[idx]["id"], take_id_id=taken))
-        print(take)
-
+        # print(take)
+        # print(typ)
+        # {1: +6}
+        typy = Typ.objects.all().values()
+        print(take[0][0].answer_id_id)
+        camyduh = {}
+        for x in zabiju_se_XD:
+            for i in typy:
+                camyduh.update({i["id"]: 0})
+                if i["id"] == x["typ_id"] and i["typ"] != 'výplňová':
+                    print(i["id"])
+        for i in typ:
+            for idx, q in enumerate(Questions.objects.all()):
+                if q.id == i["que_id"]:
+                    # print("==", q.id)
+                    if q.id == \
+                        self.model.objects.get(question_id_id=q.id,
+                                                   takeanswers=TakeAnswers.objects.get(answer_id_id=context["answers"].values()[idx]["id"], take_id_id=taken).id).question_id_id:
+                            if i["typ_id"] in camyduh and camyduh[i["typ_id"]] != 0:
+                                # print("co", camyduh[i["typ_id"]])
+                                temp = {i["typ_id"]: camyduh[i["typ_id"]] + self.model.objects.filter(question_id_id=q.id).values()[0]["value"]}
+                                print(temp)
+                                camyduh.update(temp)
+                            else:
+                                camyduh[i["typ_id"]] = self.model.objects.filter(question_id_id=q.id).values()[0]["value"]
+        print(camyduh)
 
         context["questions"] = Questions.objects.all()
         context["take"] = taken
         context["ansTake"] = take
-        # context["valid"] = valid
-        # context["take"] = TakeAnswers.objects.filter(answer_id_id=context["answers"])
+        context["typ"] = typ
+        context["spracuj"] = camyduh
         return context
-
 
 
 
