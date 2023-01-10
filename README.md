@@ -37,14 +37,26 @@ Server by měl běžet na http://127.0.0.1:8000/
 ## Časový harmonogram
 Září: 
 - > Navrhnout graficky stránku, základ databázového modelu
+  - Vytvořeny základy stránky a struktura aplikace
 - Ztrávený čas:
   - 16 hodin
 
 Říjen:
 - > Vyřešit/dodělat databázový model, Vytvořit lehký funkční test
+  - Nesplnil nic
+- Ztrávený čas:
+  - 4 hodiny
 
 Listopad:
 - > Začít řešit možnost uploadu stránky na Internet, Dodělávání testů a uživatelských úrovní
+  - vytvoření a navržení databázového modelu
+- Ztrávený čas:
+  - 6 hodin
 
-Prosinec: 
+Prosinec a Leden: 
 - > Kdo ví. Finální úpravy
+  - Vytvoření funkčního testu
+  - Volání motivačních citátů přes api
+  - Možnost odeslání emailu přímo ze stránky
+- Ztrávený čas:
+  - 138 hodin
