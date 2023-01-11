@@ -59,26 +59,29 @@ class MyFormView(View):
     form_class = ContactForm
     initial = {'key': 'value'}
     template_name = 'contact.html'
-
+    #funkce get, obstarává request.method.GET
     def get(self, request, *args, **kwargs):
         form = self.form_class(initial=self.initial)
-        return render(request, self.template_name, {'form': form})
+        return render(request, self.template_name, {'form': form}) #posílá jako context formulář
 
     def post(self, request, *args, **kwargs):
-        form = self.form_class(request.POST)
+        form = self.form_class(request.POST) #jestli se jedná o request na mothod POST
+        # jestli je form validní, do proměnných se uloží vyčištěná data z formuláře.
         if form.is_valid():
             subject = form.cleaned_data["subject"]
             email = form.cleaned_data["from_email"]
-            from_email = "gridsend.kontakt@gmail.com"
-            to_email = "vojtabern@gmail.com"
+            from_email = "gridsend.kontakt@gmail.com"  #z jakého emailu se email reálně odešle
+            to_email = "vojtabern@gmail.com" #na jaký email mail dojde
             text = form.cleaned_data['message']
             subject = subject + ' || mail: ' + email
+            # funkce Mail, formuluje data aby byly možná pro odeslání
             message = Mail(
                 from_email, to_email, subject, text
             )
+            #Sendgrid část
             try:
-                sg = SendGridAPIClient(os.environ.get('SENDGRID_API_KEY'))
-                response = sg.send(message)
+                sg = SendGridAPIClient(os.environ.get('SENDGRID_API_KEY')) # získá klíč k sendgrid službě
+                response = sg.send(message) # odešle Mail
                 print(response.status_code)
                 print(response.body)
                 print(response.headers)

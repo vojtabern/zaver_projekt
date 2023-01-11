@@ -1,0 +1,14 @@
+    {%load static %}
+
+
+      <ul class="uryvky">
+          {%for informaci in informace%}
+          <li><b>Psychologické poradenství, psychoterapie</b></li>
+          <li>{{informaci.cena_poradenstvi_min}}Kč až {{informaci.cena_poradenstvi_max}}Kč</li>
+          <li><b>Diagnostika</b> - {{informaci.cena_diagnostika}}Kč</li>
+          <li><b>Supervize</b> - {{informaci.cena_supervize}}Kč</li>
+          <li><b>Týmová supervize od</b> - {{informaci.cena_tymove_supervize}}Kč</li>
+         <li><b>Osatní ceny dle zakázky</b></li>
+            {%endfor%}
+     </ul>
+     <p><i>*Cena vždy souvisí s typem zakázky a je stanovena po vzájemné dohodě.</i></p>

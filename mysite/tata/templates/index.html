@@ -1,47 +1,69 @@
 {%extends "base.html"%}
 
 {%block content%}
-<div class="container">
-    <div class="row">
-        <div class="col-md-8 pt-2">
+    <div class="row p-1">
+        <div class="col-md-5 pt-1">
+             {%for informaci in informace%}
+            <h4>{{informaci.titul}}  {{informaci.name}} {{informaci.surrname}}</h4>
+            {%endfor%}
+            <div  class="d-flex p-2 justify-content-center">
+                <img src='static/img/education_man.png' width="50%" alt="Jan Bernard"/>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <ul class="uryvky">
+                        <li> Trápí vás vaše malé sebevědomí?</li>
+                        <li>
+                            Máte pocit prázdnoty ve svém životě?
+                        </li>
+                        <li>
+                            Trpíte různými úzkostmi a strachy?
+                        </li>
+                        <li>
+                            Jste zklamaní z reakcí okolí na vaše problémy?
+                        </li>
+                    </ul>
+                </div>
+                <div class="col-md-6">
+                    <ul class="uryvky">
+                        <li>
+                            Nechcete dlouho čekat na konzultaci?
+                        </li>
+                        <li>
+                            Hledáte svou další cestu životem?
+                        </li>
+                        <li>
+                            Chcete se o sobě více dozvědět?
+                        </li>
+                        <li>
+                            Máte zájem o supervizi či osobnostní rozvoj?
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <p><b>Pokusíme se společně nalézt odpovědi na vaše potřeby a trápení.</b></p>
+        </div>
+           <div class="col-md-4 pt-1">
             <h4>O mě</h4>
             <p>Poskytuji privátní psychologickou péči a služby pro jednotlivce, firmy a instituce.
                 Nabízím pomoc v náročných situacích života, a to jak v osobních, tak v partnerských problémech.
             </p>
-            <ul>
-                <li>
-                    Trápí vás vaše malé sebevědomí?
-                </li>
-                <li>
-                    Máte pocit prázdnoty ve svém životě?
-                </li>
-                <li>
-                    Trpíte různými úzkostmi a strachy?
-                </li>
-                <li>
-                    Jste zklamaní z reakcí okolí na vaše problémy?
-                </li>
-                <li>
-                    Chcete konzultaci, nechcete dlouho čekat?
-                </li>
-                <li>
-                    Hledáte svou další cestu životem?
-                </li>
-                <li>
-                    Chcete se o sobě více dozvědět?
-                </li>
-                <li>
-                    Máte zájem o supervizi či osobnostní rozvoj?
-                </li>
-            </ul>
-            <p><b>Pokusíme se společně nalézt odpovědi na vaše potřeby a trápení.</b></p>
-        </div>
-        <div class="col-md-4">
+               <img class="radius" src='static/img/temno.jpg' width="100%" alt="Depression"/>
+           </div>
+         <div class="col-md-3">
             {% block card %}
                 {%include "page/card.html"%}
             {%endblock%}
+             <div class="card text-center border border-dark">
+              {% block price %}
+                {%include "page/price.html"%}
+            {%endblock%}
+             </div>
+         </div>
+
+
     </div>
-</div>
+
 
 
 {%endblock%}

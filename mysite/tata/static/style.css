@@ -5,12 +5,12 @@
 }
 
 .card{
-     background-color: #fce3b1;
+     background-color: #f3e0c5;
      margin-top: 5px;
 }
 
 .warm-orange{
-    background-color: #FEC47F;
+    background-color: #e7d597;
 }
 
 header{
@@ -78,9 +78,18 @@ div.trans ul {
   opacity: 1
 }
 
-
-
 div.cont {
     color: #010000;
 }
 
+.pozadi{
+    background: #dfe1e6;
+}
+
+.radius{
+    border-radius: 12px;
+}
+
+#messages{
+    width: 60%;
+}

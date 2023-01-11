@@ -29,9 +29,9 @@
                         </p>
                         <form method="post">
                             {% csrf_token %}
-                            {{form.user}}
+                            <label>Zadejte email: {{form.user}}</label>
                             <input hidden id="number" name="number" value="{{t.id}}" readonly />
-                            <input value="Spustit" type="submit"/>
+                            <input id="email" value="Spustit" type="submit"/>
                         </form>
                     </div>
                 {% empty %}

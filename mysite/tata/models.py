@@ -67,6 +67,11 @@ class basicInfo(models.Model):
     telefon = models.CharField(default='+420 737 881 112',max_length=18)
     email = models.EmailField(default='jbernard@hotmail.cz')
     titul = models.CharField(default='Mgr.',max_length=18)
+    cena_poradenstvi_min = models.IntegerField(default=300)
+    cena_poradenstvi_max = models.IntegerField(default=600)
+    cena_diagnostika = models.IntegerField(default=1000)
+    cena_supervize = models.IntegerField(default=600)
+    cena_tymove_supervize = models.IntegerField(default=800)
     psycholog_id = models.OneToOneField(Psycholog, on_delete=models.CASCADE)
 
     class Meta:
