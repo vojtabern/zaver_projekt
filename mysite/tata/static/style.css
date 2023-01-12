@@ -18,7 +18,7 @@ header{
 }
 
 h1{
-    color: #76b5c5;
+    color: white;
 }
 
 nav{
@@ -43,6 +43,7 @@ footer{
 
 #intro {
       height: 100%;
+      background: url('/static/img/uvodni.jpg')
     }
 
     /* Height for devices larger than 992px */
@@ -93,3 +94,13 @@ div.cont {
 #messages{
     width: 60%;
 }
+
+.blue {
+    color: #6db1c9;
+}
+@media screen and (max-width: 767px){
+    .blue{
+        color: #062c9e;
+    }
+}
+
